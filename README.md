@@ -10,6 +10,34 @@ This project includes a complete frontend design with multiple pages and a backe
 Built for learning full-stack development and real-world restaurant website structure.
 
 ---
+## 🖥️ Screenshots
+
+### 🏠 Home Page
+![Home](home.png)
+
+### 📖 About Us
+![About](about.png)
+
+### ☕ Menu
+![Menu](menu.png)
+
+### ⭐ Specials
+![Specials](specials.png)
+
+### 📞 Contact
+![Contact](contact.png)
+
+### 🛒 Cart
+![Cart](cart.png)
+
+### 👤 Account
+![Account](account.png)
+
+### 📝 Sign Up
+![Sign Up](signup.png)
+
+### 🔐 Sign In
+![Sign In](signin.png)
 
 ## 🚀 Features
 
