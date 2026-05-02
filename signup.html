@@ -1268,6 +1268,7 @@
 
 @media (max-width:900px) {
   .nav-hamburger { display: flex; }
+  .nav-actions { display: none; }
   .nav-links {
     display: none;
     position: fixed;
@@ -1277,11 +1278,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 32px;
+    gap: 28px;
     z-index: 150;
   }
   .nav-links.open { display: flex; }
   .nav-links a { font-size: 20px; }
+  .nav-links .mobile-auth { display: flex !important; flex-direction: row; gap: 12px; margin-top: 8px; }
 }
 
 /* ── Cart table responsive ── */
@@ -1290,13 +1292,13 @@
   .cart-section { padding: 40px 16px 60px; }
   .cart-total { flex-direction: column; gap: 8px; text-align: center; }
 
-  /* Hero mobile — hide SVG cup, show content full width */
-  .hero-section { min-height: auto; padding-bottom: 40px; }
-  .hero-body { flex-direction: column; padding: 40px 20px 20px; }
-  .hero-left { max-width: 100%; }
-  .hero-image { display: none; }
+  /* Hero mobile */
+  .hero-section { min-height: auto; }
+  .hero-body { flex-direction: column; padding: 60px 20px 20px; position: relative; z-index: 2; }
+  .hero-left { max-width: 100%; position: relative; z-index: 3; }
+  .hero-image { position: relative; right: auto; top: auto; transform: none; width: 100%; max-width: 320px; margin: 20px auto 0; display: block; animation: none; opacity: 0.35; }
   .badge { display: none; }
-  .stats-bar { justify-content: center; }
+  .stats-bar { justify-content: center; flex-wrap: wrap; }
 
   /* Contact */
   .contact-wrap { padding: 32px 16px 60px; }
@@ -1342,6 +1344,8 @@
     <li><a href="/special">Our Specials</a></li>
     <li><a href="/contact">Contact</a></li>
     <li><a href="/cart">🛒 Cart</a></li>
+  
+    <li class="mobile-auth" style="display:none"><a href="/login" class="btn-ghost" style="color:var(--amber-light)">Sign In</a><a href="/signup" class="btn-primary">Sign Up</a></li>
   </ul>
       <div class="nav-actions">
         <a href="/login" class="btn-ghost">Sign In</a>
