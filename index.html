@@ -689,6 +689,86 @@ h1 em { font-style: italic; color: var(--amber-light); }
   .values-grid { grid-template-columns: 1fr; }
 }
 </style>
+
+<style>
+/* ===== MOBILE RESPONSIVE FIXES ===== */
+
+/* Hide hamburger on desktop, show nav-actions */
+@media (min-width: 901px) {
+  .nav-hamburger { display: none !important; }
+  .nav-actions { display: flex !important; }
+  .mobile-auth { display: none !important; }
+}
+
+/* Mobile nav */
+@media (max-width: 900px) {
+  .nav-hamburger { display: flex !important; }
+  .nav-actions { display: none !important; }
+
+  .nav-links {
+    display: none !important;
+    position: fixed !important;
+    top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+    background: rgba(26,10,0,.97) !important;
+    backdrop-filter: blur(20px) !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 28px !important;
+    z-index: 150 !important;
+  }
+  .nav-links.open { display: flex !important; }
+  .nav-links a { font-size: 20px !important; }
+  .mobile-auth { display: flex !important; gap: 12px; margin-top: 8px; }
+  .mobile-auth li { list-style: none; }
+}
+
+/* Hero fix — stack on mobile */
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: auto !important;
+    overflow: visible !important;
+  }
+  .hero-body {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 40px 20px 20px !important;
+    position: relative !important;
+    z-index: 2 !important;
+    min-height: auto !important;
+  }
+  .hero-left {
+    max-width: 100% !important;
+    width: 100% !important;
+    position: relative !important;
+    z-index: 5 !important;
+  }
+  /* CRITICAL: take image out of absolute flow */
+  .hero-image {
+    position: relative !important;
+    right: auto !important;
+    left: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    width: 80% !important;
+    max-width: 280px !important;
+    margin: 24px auto 0 !important;
+    display: block !important;
+    animation: none !important;
+    opacity: 0.6 !important;
+    pointer-events: none !important;
+  }
+  .badge { display: none !important; }
+  h1 { font-size: 36px !important; }
+  .hero-desc { font-size: 14px !important; margin-bottom: 28px !important; }
+  .stats-bar {
+    flex-wrap: wrap !important;
+    gap: 20px !important;
+    padding: 24px 20px 32px !important;
+  }
+}
+</style>
 </head>
 <body>
 
