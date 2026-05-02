@@ -707,117 +707,90 @@ h1 em { font-style: italic; color: var(--amber-light); }
   </style>
 
 
-<style id="mobile-fix-final">
-/* =========================================
-   DEFINITIVE MOBILE FIX - overrides all
-   ========================================= */
 
-/* --- Hamburger --- */
-.nav-hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-  z-index: 9999;
+<style id="mfix">
+/* NAV HAMBURGER */
+.nav-hamburger{display:none;flex-direction:column;gap:6px;background:none;border:none;padding:6px;cursor:pointer;position:relative;z-index:99999;}
+.nav-hamburger span{display:block;width:26px;height:2.5px;background:var(--amber-light);border-radius:3px;transition:all .3s;}
+.nav-hamburger.open span:nth-child(1){transform:translateY(8.5px) rotate(45deg);}
+.nav-hamburger.open span:nth-child(2){opacity:0;}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-8.5px) rotate(-45deg);}
+
+/* MOBILE NAV OVERLAY */
+.nav-overlay{
+  display:none;
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  background:#1a0a00;
+  z-index:99990;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:32px;
 }
-.nav-hamburger span {
-  display: block;
-  width: 26px;
-  height: 2px;
-  background: var(--amber-light);
-  border-radius: 2px;
-  transition: all .3s;
+.nav-overlay.open{display:flex;}
+.nav-overlay a{
+  color:#fff;
+  text-decoration:none;
+  font-size:22px;
+  font-family:'DM Sans',sans-serif;
+  font-weight:400;
+  letter-spacing:.05em;
+  transition:color .2s;
 }
-.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.nav-hamburger.open span:nth-child(2) { opacity: 0; }
-.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-@media (max-width: 900px) {
-  /* Show hamburger, hide desktop nav-actions */
-  .nav-hamburger { display: flex !important; }
-  .nav-actions   { display: none   !important; }
-
-  /* Full-screen overlay menu */
-  .nav-links {
-    display: none !important;
-    position: fixed !important;
-    inset: 0 !important;
-    background: rgba(26,10,0,.97) !important;
-    backdrop-filter: blur(20px) !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 30px !important;
-    z-index: 9000 !important;
-    list-style: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-  .nav-links.open { display: flex !important; }
-  .nav-links a    { font-size: 22px !important; color: var(--white) !important; }
-  .mobile-auth    { display: flex !important; gap: 12px !important; align-items: center !important; }
+.nav-overlay a:hover{color:var(--amber-light);}
+.nav-overlay .overlay-auth{display:flex;gap:14px;margin-top:8px;}
+.nav-close{
+  position:absolute;top:24px;right:24px;
+  background:none;border:none;color:#fff;
+  font-size:32px;cursor:pointer;line-height:1;
+  z-index:99999;
 }
 
-/* --- Hero section mobile fix --- */
-@media (max-width: 900px) {
-  /* Make hero-section a normal block, not viewport height */
-  .hero-section {
-    min-height: auto !important;
-    display: block !important;
-  }
-
-  /* Stack hero-body vertically */
-  .hero-body {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    padding: 50px 20px 24px !important;
-    position: static !important;
-  }
-
-  /* Text first, full width */
-  .hero-left {
-    max-width: 100% !important;
-    width: 100% !important;
-    position: static !important;
-    z-index: auto !important;
-  }
-
-  h1 { font-size: 38px !important; letter-spacing: -.01em !important; }
-  .hero-desc { max-width: 100% !important; font-size: 14px !important; }
-
-  /* Pull image out of absolute positioning - put it below text */
-  .hero-image {
-    position: static !important;
-    transform: none !important;
-    width: 70% !important;
-    max-width: 260px !important;
-    margin: 0 auto !important;
-    display: block !important;
-    animation: none !important;
-    opacity: 0.7 !important;
-  }
-
-  /* Hide floating badges */
-  .badge-1, .badge-2 { display: none !important; }
-
-  /* Stats bar */
-  .stats-bar {
-    flex-wrap: wrap !important;
-    gap: 20px !important;
-    padding: 24px 20px 36px !important;
-  }
-  .stat-divider { display: none !important; }
+@media(max-width:900px){
+  .nav-hamburger{display:flex !important;}
+  .nav-actions{display:none !important;}
+  .nav-links{display:none !important;}
+}
+@media(min-width:901px){
+  .nav-overlay{display:none !important;}
+  .nav-hamburger{display:none !important;}
 }
 
-@media (max-width: 480px) {
-  h1 { font-size: 32px !important; }
-  .hero-image { width: 60% !important; max-width: 220px !important; }
-  .stats-bar { gap: 16px !important; }
-  .stat-num { font-size: 32px !important; }
+/* HERO MOBILE FIX */
+@media(max-width:900px){
+  .hero-section{min-height:auto !important;overflow:hidden !important;}
+  .hero-body{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    padding:50px 20px 10px !important;
+    position:relative !important;
+    min-height:auto !important;
+  }
+  .hero-left{
+    width:100% !important;
+    max-width:100% !important;
+    position:relative !important;
+    z-index:10 !important;
+  }
+  h1{font-size:36px !important;}
+  .hero-desc{font-size:14px !important;max-width:100% !important;}
+  .hero-image{
+    position:relative !important;
+    top:auto !important;right:auto !important;
+    bottom:auto !important;left:auto !important;
+    transform:none !important;
+    width:65% !important;
+    max-width:240px !important;
+    margin:16px auto 0 !important;
+    display:block !important;
+    animation:none !important;
+    opacity:.55 !important;
+  }
+  .badge-1,.badge-2{display:none !important;}
+  .stats-bar{flex-wrap:wrap !important;gap:20px !important;padding:24px 20px 32px !important;}
+  .stat-divider{display:none !important;}
 }
 </style>
 </head>
@@ -827,33 +800,19 @@ h1 em { font-style: italic; color: var(--amber-light); }
 
 <!-- NAVIGATION -->
 <nav>
+<button class="nav-hamburger" id="navHamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
   <a href="/" class="logo">
     <div class="logo-icon">☕</div>
     <div class="logo-text"><span>Coffee</span><span>Time</span></div>
   </a>
-    <button class="nav-hamburger" id="navHamburger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
     <li><a href="/about">About Us</a></li>
     <li><a href="/menu">Menu</a></li>
     <li><a href="/special">Our Specials</a></li>
     <li><a href="/contact" class="active">Contact</a></li>
-  
-    {% if user %}
-    <li class="mobile-auth" style="display:none">
-      <a href="/account" style="color:var(--amber-light);font-size:18px;text-decoration:none;font-weight:500;">👋 {{ user.first_name }}</a>
-    </li>
-    <li class="mobile-auth" style="display:none">
-      <a href="/logout" class="btn-primary" style="background:rgba(220,50,50,.15);border:1px solid rgba(220,50,50,.3);color:#ff8080;box-shadow:none;">Logout</a>
-    </li>
-    {% else %}
-    <li class="mobile-auth" style="display:none">
-      <a href="/login" class="btn-ghost" style="color:var(--amber-light)">Sign In</a>
-      <a href="/signup" class="btn-primary">Sign Up</a>
-    </li>
-    {% endif %}
   </ul>
   <div class="nav-actions">
     {% if user %}
@@ -865,6 +824,25 @@ h1 em { font-style: italic; color: var(--amber-light); }
     {% endif %}
   </div>
 </nav>
+
+<div class="nav-overlay" id="navOverlay">
+  <button class="nav-close" id="navClose">✕</button>
+  <a href="/">Home</a>
+    <a href="/about">About Us</a>
+    <a href="/menu">Menu</a>
+    <a href="/special">Our Specials</a>
+    <a href="/contact">Contact</a>
+  
+    {% if user %}
+    <a href="/account">👋 {{ user.first_name }}</a>
+    <a href="/logout" class="btn-primary" style="background:rgba(220,50,50,.2);border:1px solid rgba(220,50,50,.4);color:#ff8080;box-shadow:none;">Logout</a>
+    {% else %}
+    <div class="overlay-auth">
+      <a href="/login" style="color:var(--amber-light);">Sign In</a>
+      <a href="/signup" class="btn-primary">Sign Up</a>
+    </div>
+    {% endif %}
+</div>
 
 <!-- PAGE BANNER -->
 <div class="page-banner">
@@ -1172,6 +1150,27 @@ if (hamburger && navLinks) {
     });
   });
 }
+
+/* Hamburger nav */
+(function(){
+  var btn     = document.getElementById('navHamburger');
+  var overlay = document.getElementById('navOverlay');
+  var close   = document.getElementById('navClose');
+  if(!btn || !overlay) return;
+  btn.addEventListener('click', function(){
+    overlay.classList.add('open');
+    document.body.style.overflow='hidden';
+  });
+  function closeNav(){
+    overlay.classList.remove('open');
+    document.body.style.overflow='';
+  }
+  if(close) close.addEventListener('click', closeNav);
+  overlay.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeNav);
+  });
+})();
+
 </script>
 </body>
 </html>
