@@ -608,6 +608,84 @@ h1 em { font-style: italic; color: var(--amber-light); }
   .auth-box { padding: 32px 24px; }
 }
 
+
+/* ── Hamburger Menu ── */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  z-index: 200;
+}
+.nav-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--amber-light);
+  border-radius: 2px;
+  transition: all .3s;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width:900px) {
+  .nav-hamburger { display: flex; }
+  .nav-links {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(26,10,0,.97);
+    backdrop-filter: blur(20px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    z-index: 150;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { font-size: 20px; }
+}
+
+/* ── Cart table responsive ── */
+@media (max-width:600px) {
+  .cart-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .cart-section { padding: 40px 16px 60px; }
+  .cart-total { flex-direction: column; gap: 8px; text-align: center; }
+
+  /* Hero mobile — hide SVG cup, show content full width */
+  .hero-section { min-height: auto; padding-bottom: 40px; }
+  .hero-body { flex-direction: column; padding: 40px 20px 20px; }
+  .hero-left { max-width: 100%; }
+  .hero-image { display: none; }
+  .badge { display: none; }
+  .stats-bar { justify-content: center; }
+
+  /* Contact */
+  .contact-wrap { padding: 32px 16px 60px; }
+
+  /* Account */
+  .account-section { padding: 32px 16px 60px; }
+  .perks-list { grid-template-columns: 1fr; }
+
+  /* Special hero */
+  .special-hero-content { padding: 28px 20px; }
+  .special-hero-content h3 { font-size: 24px; }
+  .price-new { font-size: 28px; }
+
+  /* Nav actions on mobile — hide text labels if needed */
+  .nav-actions { gap: 8px; }
+  .btn-ghost { padding: 8px 10px; font-size: 13px; }
+  .btn-primary { padding: 9px 14px; font-size: 13px; }
+}
+
+@media (max-width:400px) {
+  .auth-box { padding: 28px 16px; }
+  .values-grid { grid-template-columns: 1fr; }
+}
 </style>
   <style>
     /* Contact page layout */
@@ -636,6 +714,9 @@ h1 em { font-style: italic; color: var(--amber-light); }
     <div class="logo-icon">☕</div>
     <div class="logo-text"><span>Coffee</span><span>Time</span></div>
   </a>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
   <ul class="nav-links">
     <li><a href="/">Home</a></li>
     <li><a href="/about">About Us</a></li>
@@ -944,6 +1025,22 @@ if (revealEls.length) {
   });
 }
 
+
+/* ── Hamburger toggle ── */
+const hamburger = document.getElementById("navHamburger");
+const navLinks  = document.querySelector(".nav-links");
+if (hamburger && navLinks) {
+  hamburger.addEventListener("click", () => {
+    hamburger.classList.toggle("open");
+    navLinks.classList.toggle("open");
+  });
+  navLinks.querySelectorAll("a").forEach(a => {
+    a.addEventListener("click", () => {
+      hamburger.classList.remove("open");
+      navLinks.classList.remove("open");
+    });
+  });
+}
 </script>
 </body>
 </html>
