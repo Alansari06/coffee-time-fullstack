@@ -29,23 +29,9 @@ app.secret_key = "coffeetime_secret_2025_change_me"
 
 
 # ── 2. DATABASE CONNECTION ───────────────────────────────────────────────────
-
 def get_db():
-    """
-    Creates and returns a fresh connection to the PostgreSQL database.
-    We call this function every time we need to talk to the database.
-    """
-
-    # psycopg2.connect() opens a connection to PostgreSQL
-    conn = psycopg2.connect(
-        dbname   = "cofftime",   # The name of our database
-        user     = "postgres",   # PostgreSQL login username
-        password = "anas@9076",  # PostgreSQL login password
-        host     = "localhost",  # Database server address (our own machine)
-        port     = "5432"        # PostgreSQL default port number
-    )
-
-    # Send back the connection so the caller can use it
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+    conn = psycopg2.connect(DATABASE_URL)
     return conn
 
 
