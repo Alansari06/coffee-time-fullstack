@@ -686,13 +686,9 @@ def logout():
 
 # ── 15. RUN THE APP ───────────────────────────────────────────────────────────
 
-if __name__ == "__main__":
-
-    # First create all tables (safe — won't overwrite existing data)
+# Ye Render pe bhi chalega
+with app.app_context():
     create_tables()
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
 
-    # Start Flask development server
-    # debug=True → shows errors in browser + auto-restarts on code change
-    app.run(debug=True)
-   
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
