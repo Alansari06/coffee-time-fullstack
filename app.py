@@ -15,8 +15,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # functools.wraps — needed to create our custom login_required decorator
 from functools import wraps
 
-import os
-
+import os  # For reading environment variables (like DATABASE_URL)
 
 # ── 1. CREATE FLASK APP ──────────────────────────────────────────────────────
 
@@ -682,6 +681,244 @@ def logout():
 
     # Send to home page after logout
     return redirect(url_for("home"))
+
+#logout route from admin panel
+@app.route('/admin/logout')
+def admin_logout():
+    session.pop("admin", None)
+    return redirect('/admin/login')
+
+# ✅ YAHAN LIKHO — admin logout ke neeche
+# admin login
+@app.route("/admin/login", methods=["GET", "POST"])
+def admin_login():
+    if session.get("admin"):
+        return redirect("/admin")
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "").strip()
+        if username == "admin" and password == "coffee123":
+            session["admin"] = True
+            print("✅ Admin logged in!")
+            return redirect("/admin")
+        else:
+            return render_template("admin/login.html",
+                                   error="Wrong username or password!")
+    return render_template("admin/login.html")
+
+# Admin dashboard route
+@app.route("/admin")
+def admin_dashboard():
+
+    # Check if admin is Logged in
+    if not session.get("admin"):
+        return redirect("/admin/login")
+    
+    conn = get_db()
+    cur  = conn.cursor()
+
+    # total users
+    cur.execute("SELECT COUNT(*) FROM users")
+    total_users = cur.fetchone()[0]
+
+    # total orders
+    cur.execute("SELECT COUNT(*) FROM orders")
+    total_orders = cur.fetchone()[0]
+
+    # total revenue
+    cur.execute("SELECT COALESCE(SUM(total_amount), 0) FROM orders WHERE status = 'confirmed'")
+    total_revenue = cur.fetchone()[0]
+
+    #pending orders
+    cur.execute("SELECT COUNT(*) FROM orders WHERE status = 'pending'")
+    pending_orders = cur.fetchone()[0]
+
+    cur.close()
+    conn.close()
+
+    #Send data to admin dashboard
+    return render_template("admin/dashboard.html",
+                           total_users=total_users,
+                           total_orders=total_orders,
+                           total_revenue=total_revenue,
+                           pending_orders=pending_orders)
+
+# admin orders page
+@app.route("/admin/orders")
+def admin_orders():
+
+    # check karo admin logged in hai
+    if not session.get("admin"):
+        return redirect("/admin/login")
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    # saare orders fetch karo — newest pehle
+    cur.execute("""
+        SELECT id, user_email, total_amount, status, created_at 
+        FROM orders 
+        ORDER BY created_at DESC
+    """)
+
+    rows = cur.fetchall()
+
+    # har row ko dictionary mein convert karo
+    orders = []
+    for row in rows:
+        orders.append({
+            "id":         row[0],
+            "email":      row[1],
+            "total":      row[2],
+            "status":     row[3],
+            "created_at": row[4],
+        })
+
+    cur.close()
+    conn.close()
+
+    return render_template("admin/orders.html", orders=orders)
+
+# show all menu items
+@app.route("/admin/menu")
+def admin_menu():
+
+    if not session.get("admin"):
+        return redirect("/admin/login")
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    # get all unique items from order_items table
+    cur.execute("""
+        SELECT id, item_name, item_price, category
+        FROM order_items
+        GROUP BY id, item_name, item_price, category
+        ORDER BY category
+    """)
+
+    rows = cur.fetchall()
+
+    # convert rows to list of dictionaries
+    items = []
+    for row in rows:
+        items.append({
+            "id":       row[0],
+            "name":     row[1],
+            "price":    row[2],
+            "category": row[3],
+        })
+
+    cur.close()
+    conn.close()
+
+    return render_template("admin/menu.html", items=items)
+
+
+# add new item to menu
+@app.route("/admin/menu/add", methods=["POST"])
+def admin_menu_add():
+
+    if not session.get("admin"):
+        return redirect("/admin/login")
+
+    # get data from form
+    item_name  = request.form.get("item_name", "").strip()
+    item_price = request.form.get("item_price")
+    category   = request.form.get("category")
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    # insert new item into database
+    cur.execute("""
+        INSERT INTO order_items (order_id, item_name, item_price, category, quantity)
+        VALUES (NULL, %s, %s, %s, 1)
+    """, (item_name, float(item_price), category))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect("/admin/menu")
+
+
+# delete item from menu
+@app.route("/admin/menu/delete/<int:item_id>")
+def admin_menu_delete(item_id):
+
+    if not session.get("admin"):
+        return redirect("/admin/login")
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    # delete item by id
+    cur.execute("DELETE FROM order_items WHERE id = %s", (item_id,))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect("/admin/menu")
+
+
+# edit item price and name
+@app.route("/admin/menu/edit/<int:item_id>", methods=["POST"])
+def admin_menu_edit(item_id):
+
+    if not session.get("admin"):
+        return redirect("/admin/login")
+
+    # get updated data from form
+    item_name  = request.form.get("item_name", "").strip()
+    item_price = request.form.get("item_price")
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    # update item in database
+    cur.execute("""
+        UPDATE order_items
+        SET item_name = %s, item_price = %s
+        WHERE id = %s
+    """, (item_name, float(item_price), item_id))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect("/admin/menu")
+
+@app.route("/admin/users")
+def admin_users():
+    if not session.get("admin"):
+        return redirect("/admin/login")
+    
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT id, first_name, last_name, email, phone, created_at 
+        FROM users 
+        ORDER BY created_at DESC
+    """)
+    rows = cur.fetchall()
+    users = []
+    for row in rows:
+        users.append({
+            "id":         row[0],
+            "first_name": row[1],
+            "last_name":  row[2],
+            "email":      row[3],
+            "phone":      row[4],
+            "joined":     row[5],
+        })
+
+        cur.close()
+        conn.close()
+
+        return render_template("admin/users.html", users=users)
 
 
 # ── 15. RUN THE APP ───────────────────────────────────────────────────────────

@@ -1,0 +1,151 @@
+{% extends 'admin/base.html' %} {% block content %}
+
+<h1>Menu Items</h1>
+<p class="subtitle">Manage your coffee menu</p>
+
+<!-- add new item form -->
+<div class="table-box" style="margin-bottom: 30px">
+  <h3 style="color: #2c1a0e; margin-bottom: 15px">➕ Add New Item</h3>
+
+  <form
+    method="POST"
+    action="/admin/menu/add"
+    style="display: flex; gap: 10px; flex-wrap: wrap"
+  >
+    <!-- item name input -->
+    <input
+      type="text"
+      name="item_name"
+      placeholder="Item Name"
+      required
+      style="
+        padding: 10px;
+        border: 2px solid #eee;
+        border-radius: 8px;
+        font-size: 14px;
+        flex: 1;
+      "
+    />
+
+    <!-- item price input -->
+    <input
+      type="number"
+      name="item_price"
+      placeholder="Price"
+      required
+      style="
+        padding: 10px;
+        border: 2px solid #eee;
+        border-radius: 8px;
+        font-size: 14px;
+        width: 120px;
+      "
+    />
+
+    <!-- category dropdown -->
+    <select
+      name="category"
+      style="
+        padding: 10px;
+        border: 2px solid #eee;
+        border-radius: 8px;
+        font-size: 14px;
+      "
+    >
+      <option value="hot">🔥 Hot</option>
+      <option value="cold">🧊 Cold</option>
+      <option value="food">🍽️ Food</option>
+    </select>
+
+    <!-- submit button -->
+    <button type="submit" class="btn-gold">Add Item</button>
+  </form>
+</div>
+
+<!-- menu items table -->
+<div class="table-box">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Item Name</th>
+        <th>Price</th>
+        <th>Category</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- no items message -->
+      {% if not items %}
+      <tr>
+        <td colspan="6" style="text-align: center; padding: 30px">
+          No menu items yet!
+        </td>
+      </tr>
+      {% endif %}
+
+      <!-- show each item in a row -->
+      {% for item in items %}
+      <tr>
+        <td>{{ item.id }}</td>
+
+        <!-- edit form inline -->
+        <form method="POST" action="/admin/menu/edit/{{ item.id }}">
+          <td>
+            <input
+              type="text"
+              name="item_name"
+              value="{{ item.name }}"
+              style="
+                padding: 6px;
+                border: 1px solid #eee;
+                border-radius: 6px;
+                width: 150px;
+              "
+            />
+          </td>
+          <td>
+            <input
+              type="number"
+              name="item_price"
+              value="{{ item.price }}"
+              style="
+                padding: 6px;
+                border: 1px solid #eee;
+                border-radius: 6px;
+                width: 80px;
+              "
+            />
+          </td>
+
+          <!-- category with emoji -->
+          <td>
+            {% if item.category == 'hot' %} 🔥 Hot {% elif item.category ==
+            'cold' %} 🧊 Cold {% else %} 🍽️ Food {% endif %}
+          </td>
+
+          <!-- save edit button -->
+          <td>
+            <button type="submit" class="btn-gold">Save</button>
+          </td>
+        </form>
+
+        <!-- delete button -->
+        <td>
+          <a
+            href="/admin/menu/delete/{{ item.id }}"
+            onclick="return confirm('Delete this item?');"
+            class="btn-red"
+            style="text-decoration: none; padding: 8px 16px; border-radius: 6px"
+          >
+            Delete
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+
+<h1>Orders</h1>
+<p class="subtitle">All customer orders</p>
+
+<!-- orders table -->
+<div class="table-box">
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer Email</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <!-- agar koi order nahi hai -->
+            {% if not orders %}
+            <tr>
+                <td colspan="6" style="text-align:center; padding: 30px;">
+                    No orders yet!
+                </td>
+            </tr>
+            {% endif %}
+
+            <!-- har order ek row mein dikhao -->
+            {% for order in orders %}
+            <tr>
+                <td>#{{ order.id }}</td>
+                <td>{{ order.email }}</td>
+                <td>₹{{ order.total }}</td>
+
+                <!-- status ke hisaab se color -->
+                <td>
+                    {% if order.status == 'pending' %}
+                        <span style="color: orange; font-weight: bold;">⏳ Pending</span>
+                    {% elif order.status == 'confirmed' %}
+                        <span style="color: green; font-weight: bold;">✅ Confirmed</span>
+                    {% else %}
+                        <span style="color: blue; font-weight: bold;">🚀 Delivered</span>
+                    {% endif %}
+                </td>
+
+                <td>{{ order.created_at.strftime('%d %b %Y') }}</td>
+
+                <!-- status change buttons -->
+                <td>
+                    <form method="POST" action="/admin/orders/{{ order.id }}/status">
+                        <select name="status" style="padding: 6px; border-radius: 6px; border: 1px solid #ddd;">
+                            <option value="pending"   {% if order.status == 'pending'   %}selected{% endif %}>Pending</option>
+                            <option value="confirmed" {% if order.status == 'confirmed' %}selected{% endif %}>Confirmed</option>
+                            <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Delivered</option>
+                        </select>
+                        <button type="submit" class="btn-gold" style="margin-left: 5px;">
+                            Update
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

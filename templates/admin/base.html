@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coffee Admin</title>
+    <style>
+      /* Basic reset and styling */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      /*sidebar styling*/
+      body {
+        display: flex;
+        background: #f5f0e8;
+      }
+
+      /*left side style*/
+      .sidebar {
+        width: 250px;
+        height: 100vh;
+        background: #2c1a0e;
+        color: #fff;
+        position: fixed;
+        padding: 25px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      /* logo area */
+      .sidebar-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 35px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #4a2f1a;
+      }
+
+      /* Coffee Admin text */
+      .sidebar-logo h2 {
+        color: #d4a853;
+        font-size: 22px;
+        line-height: 1.2;
+      }
+
+      .sidebar-logo span {
+        color: #888;
+        font-size: 12px;
+        font-weight: normal;
+      }
+
+      /* navigation links */
+      .sidebar a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #ccc;
+        text-decoration: none;
+        padding: 12px 15px;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: all 0.2s;
+      }
+
+      .sidebar a:hover {
+        background: #d4a853;
+        color: #2c1a0e;
+        font-weight: bold;
+      }
+
+      /* active link */
+      .sidebar a.active {
+        background: #d4a853;
+        color: #2c1a0e;
+        font-weight: bold;
+      }
+
+      /* logout link */
+      .sidebar .logout {
+        margin-top: auto;
+        padding-top: 15px;
+      }
+
+      .main {
+        margin-left: 250px;
+        padding: 35px;
+        width: 100%;
+        min-height: 100vh;
+      }
+
+      /* page headings */
+      .main h1 {
+        color: #2c1a0e;
+        font-size: 28px;
+        margin-bottom: 5px;
+      }
+
+      /* subtitle text */
+      .main p {
+        color: #888;
+        margin-bottom: 30px;
+        font-size: 15px;
+      }
+
+      .main .subtitle {
+        color: #888;
+        margin-bottom: 30px;
+        font-size: 15px;
+      }
+
+      /* ── CARDS ── */
+
+      /* cards container */
+      .cards {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+      }
+
+      /* single card */
+      .card {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        flex: 1;
+        min-width: 180px;
+        box-shadow: 0 2px 12px rgba(44, 26, 14, 0.08);
+        border-left: 4px solid #d4a853; /* golden left border */
+      }
+
+      /* card label */
+      .card p {
+        color: #888;
+        font-size: 13px;
+        margin-bottom: 8px;
+      }
+
+      /* card number */
+      .card h2 {
+        color: #2c1a0e;
+        font-size: 2rem;
+        margin-bottom: 5px;
+      }
+
+      /* ── TABLE ── */
+
+      /* table wrapper */
+      .table-box {
+        background: white;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 2px 12px rgba(44, 26, 14, 0.08);
+      }
+
+      /* table heading */
+      .table-box h3 {
+        color: #2c1a0e;
+        margin-bottom: 15px;
+        font-size: 18px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      /* table header — dark brown */
+      th {
+        background: #2c1a0e;
+        color: #d4a853;
+        padding: 12px 15px;
+        text-align: left;
+        font-size: 14px;
+      }
+
+      /* table rows */
+      td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #f0e8d8;
+        color: #444;
+        font-size: 14px;
+      }
+
+      /* row hover */
+      tr:hover td {
+        background: #fdf6ec; /* warm hover */
+      }
+
+      /* ── BUTTONS ── */
+
+      /* golden button — website ke Order Now jaisa */
+      .btn-gold {
+        background: #d4a853;
+        color: #2c1a0e;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 13px;
+      }
+
+      .btn-gold:hover {
+        background: #c49843;
+      }
+
+      /* red button — delete ke liye */
+      .btn-red {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+
+      .btn-red:hover {
+        background: #c0392b;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- left Sidebar -->
+    <div class="sidebar">
+      <!--Logo-->
+      <div class="sidebar-logo">
+        <div>
+          <h2>☕ Coffee Admin</h2>
+          <span>Admin panel</span>
+        </div>
+      </div>
+
+      <!-- navigation links -->
+      <a href="/admin">🏠 Dashboard</a>
+      <a href="/admin/orders">📦 orders</a>
+      <a href="/admin/menu">📋 Menu</a>
+      <a href="/admin/users">👥 Users</a>
+
+      <div class="logout">
+        <a href="/admin/logout">🚪 Logout</a>
+      </div>
+    </div>
+
+    <!--each page content loads here-->
+    <div class="main">{% block content %} {% endblock %}</div>
+  </body>
+</html>

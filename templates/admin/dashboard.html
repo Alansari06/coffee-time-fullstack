@@ -1,0 +1,39 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+
+<!-- heading -->
+<h1>Dashboard</h1>
+<p class="subtitle">Welcome back, Admin! ☕</p>
+
+<!-- 4 stats cards -->
+<div class="cards">
+
+  <div class="card">
+    <p>Total Users</p>
+    <h2>{{ total_users }}</h2>
+    <p>👥 Registered</p>
+  </div>
+
+  <div class="card">
+    <p>Total Orders</p>
+    <h2>{{ total_orders }}</h2>
+    <p>📋 All Time</p>
+  </div>
+
+  <div class="card">
+    <p>Total Revenue</p>
+    <h2>₹{{ total_revenue }}</h2>
+    <p>💰 Earned</p>
+  </div>
+
+  <div class="card">
+    <p>Pending Orders</p>
+    <!-- pending orders red mein -->
+    <h2 style="color: #e74c3c;">{{ pending_orders }}</h2>
+    <p>⏳ Waiting</p>
+  </div>
+
+</div>
+
+{% endblock %}

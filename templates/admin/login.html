@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Coffee Time</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+
+        body {
+            background: #1a0a00;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            display: flex;
+            width: 900px;
+            min-height: 500px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        /* Left side */
+        .left {
+            flex: 1;
+            background: radial-gradient(ellipse at center, #8b4513 0%, #3d1a00 60%, #1a0a00 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .left .logo {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .left h1 {
+            color: #d4a853;
+            font-size: 32px;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+
+        .left p {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Right side */
+        .right {
+            flex: 1;
+            background: #2c1a0e;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 50px 40px;
+        }
+
+        .right h2 {
+            color: #d4a853;
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .right p {
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 30px;
+        }
+
+        .error {
+            background: rgba(231, 76, 60, 0.15);
+            color: #e74c3c;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            border: 1px solid rgba(231,76,60,0.3);
+        }
+
+        label {
+            color: #ccc;
+            font-size: 13px;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            background: #1a0a00;
+            border: 1px solid #4a2f1a;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 20px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        input:focus {
+            border-color: #d4a853;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #d4a853;
+            color: #2c1a0e;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #e6b85c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left -->
+        <div class="left">
+            <div class="logo">☕</div>
+            <h1>Coffee Time</h1>
+            <p>Welcome back, Admin!<br>Manage your coffee shop<br>from one place.</p>
+        </div>
+
+        <!-- Right -->
+        <div class="right">
+            <h2>Admin Login</h2>
+            <p>Enter your credentials to continue</p>
+
+            {% if error %}
+            <div class="error">{{ error }}</div>
+            {% endif %}
+
+            <form method="POST">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Enter username" required>
+
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter password" required>
+
+                <button type="submit">Login →</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
