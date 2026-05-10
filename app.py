@@ -1020,35 +1020,6 @@ def admin_users():
 
         return render_template("admin/users.html", users=users)
     
-    
-# @app.route("/admin/fix-menu")
-# def fix_menu():
-#     conn = get_db()
-#     cur = conn.cursor()
-    
-#     # image_url column add karo menu table mein
-#     cur.execute("""
-#         ALTER TABLE order_items 
-#         ADD COLUMN IF NOT EXISTS image_url TEXT DEFAULT NULL
-#     """)
-    
-#     conn.commit()
-#     cur.close()
-#     conn.close()
-#     return "Done! Image column added!"
-
-@app.route("/admin/fix-menu2")
-def fix_menu2():
-    conn = get_db()
-    cur = conn.cursor()
-    cur.execute("""
-        ALTER TABLE order_items 
-        ADD COLUMN IF NOT EXISTS description TEXT DEFAULT NULL
-    """)
-    conn.commit()
-    cur.close()
-    conn.close()
-    return "Done! Description column added!"
 
 
 # ── 15. RUN THE APP ───────────────────────────────────────────────────────────
