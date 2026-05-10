@@ -222,7 +222,36 @@ def aboutus():
 @app.route("/menu")
 def menu():
     user = get_current_user()
-    return render_template("menu.html", user=user)
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    # unique items fetch karo database se
+    cur.execute("""
+        SELECT DISTINCT ON (item_name)
+               id, item_name, item_price,
+               category, image_url, description
+        FROM order_items
+        ORDER BY item_name, id
+    """)
+
+    rows = cur.fetchall()
+
+    menu_items = []
+    for row in rows:
+        menu_items.append({
+            "id":          row[0],
+            "name":        row[1],
+            "price":       row[2],
+            "category":    row[3],
+            "image_url":   row[4] if row[4] else "",
+            "description": row[5] if row[5] else "",
+        })
+
+    cur.close()
+    conn.close()
+
+    return render_template("menu.html", user=user, menu_items=menu_items)
 
 
 # Specials page — everyone can see this
@@ -780,40 +809,32 @@ def admin_orders():
     return render_template("admin/orders.html", orders=orders)
 
 # show all menu items
+# admin menu — admin ke liye
 @app.route("/admin/menu")
-def admin_menu():
-
+def admin_menu():        # ← naya function
     if not session.get("admin"):
         return redirect("/admin/login")
-
     conn = get_db()
     cur = conn.cursor()
-
-    # get all unique items from order_items table
     cur.execute("""
-        SELECT id, item_name, item_price, category
+        SELECT id, item_name, item_price, category, image_url
         FROM order_items
-        GROUP BY id, item_name, item_price, category
+        GROUP BY id, item_name, item_price, category, image_url
         ORDER BY category
     """)
-
     rows = cur.fetchall()
-
-    # convert rows to list of dictionaries
     items = []
     for row in rows:
         items.append({
-            "id":       row[0],
-            "name":     row[1],
-            "price":    row[2],
-            "category": row[3],
+            "id":        row[0],
+            "name":      row[1],
+            "price":     row[2],
+            "category":  row[3],
+            "image_url": row[4] if row[4] else "",
         })
-
     cur.close()
     conn.close()
-
     return render_template("admin/menu.html", items=items)
-
 
 # add new item to menu
 @app.route("/admin/menu/add", methods=["POST"])
@@ -826,22 +847,22 @@ def admin_menu_add():
     item_name  = request.form.get("item_name", "").strip()
     item_price = request.form.get("item_price")
     category   = request.form.get("category")
+    Image_url   = request.form.get("image_url", "").strip()  # New field for image URL
 
     conn = get_db()
     cur = conn.cursor()
 
     # insert new item into database
     cur.execute("""
-        INSERT INTO order_items (order_id, item_name, item_price, category, quantity)
-        VALUES (NULL, %s, %s, %s, 1)
-    """, (item_name, float(item_price), category))
+        INSERT INTO order_items (order_id, item_name, item_price, category, quantity, image_url)
+        VALUES (NULL, %s, %s, %s, 1, %s)
+    """, (item_name, float(item_price), category, Image_url))
 
     conn.commit()
     cur.close()
     conn.close()
 
     return redirect("/admin/menu")
-
 
 # delete item from menu
 @app.route("/admin/menu/delete/<int:item_id>")
@@ -873,22 +894,101 @@ def admin_menu_edit(item_id):
     # get updated data from form
     item_name  = request.form.get("item_name", "").strip()
     item_price = request.form.get("item_price")
-
+    image_url = request.form.get("image_url", "").strip()
     conn = get_db()
     cur = conn.cursor()
 
     # update item in database
     cur.execute("""
         UPDATE order_items
-        SET item_name = %s, item_price = %s
+        SET item_name = %s, item_price = %s, image_url = %s
         WHERE id = %s
-    """, (item_name, float(item_price), item_id))
+    """, (item_name, float(item_price), image_url, item_id))
 
     conn.commit()
     cur.close()
     conn.close()
 
     return redirect("/admin/menu")
+
+@app.route("/admin/contacts")
+def admin_contacts():
+
+    if not session.get("admin"):
+        return redirect("/admin/login")
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    # id aur is_read bhi fetch karo
+    cur.execute("""
+        SELECT id, name, email, subject, message, created_at, is_read
+        FROM contacts
+        ORDER BY created_at DESC
+    """)
+
+    rows = cur.fetchall()
+
+    messages = []
+    for row in rows:
+        messages.append({
+            "id":         row[0],
+            "name":       row[1],
+            "email":      row[2],
+            "subject":    row[3],
+            "message":    row[4],
+            "created_at": row[5],
+            "is_read":    row[6],
+        })
+
+    cur.close()
+    conn.close()
+
+    return render_template("admin/contacts.html", messages=messages)
+
+
+@app.route("/admin/contacts/delete/<int:msg_id>")
+def admin_contacts_delete(msg_id):
+    if not session.get("admin"):
+        return redirect("/admin/login")
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute(
+        "DELETE FROM contacts WHERE id = %s",
+        (msg_id,)
+    )
+    conn.commit()    # changes save karo
+    cur.close()
+    conn.close()
+
+    return redirect("/admin/contacts")  # wapas contacts pe
+
+@app.route("/admin/contacts/read/<int:msg_id>")
+def admin_contacts_read(msg_id):
+    if not session.get("admin"):
+        return redirect("/admin/login")
+    conn = get_db()
+    cur = conn.cursor()
+
+    # pehle dekho message read hai ya unread
+    cur.execute(
+        "SELECT is_read FROM contacts WHERE id = %s",
+        (msg_id,)
+    )
+    current = cur.fetchone()[0]  # True ya False
+
+    # agar read hai toh unread karo — agar unread hai toh read karo
+    cur.execute(
+        "UPDATE contacts SET is_read = %s WHERE id = %s",
+        (not current, msg_id)
+    )
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect("/admin/contacts")  # wapas contacts pe
+
 
 @app.route("/admin/users")
 def admin_users():
@@ -919,6 +1019,35 @@ def admin_users():
         conn.close()
 
         return render_template("admin/users.html", users=users)
+    
+@app.route("/admin/fix-menu")
+def fix_menu():
+    conn = get_db()
+    cur = conn.cursor()
+    
+    # image_url column add karo menu table mein
+    cur.execute("""
+        ALTER TABLE order_items 
+        ADD COLUMN IF NOT EXISTS image_url TEXT DEFAULT NULL
+    """)
+    
+    conn.commit()
+    cur.close()
+    conn.close()
+    return "Done! Image column added!"
+
+@app.route("/admin/fix-menu2")
+def fix_menu2():
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("""
+        ALTER TABLE order_items 
+        ADD COLUMN IF NOT EXISTS description TEXT DEFAULT NULL
+    """)
+    conn.commit()
+    cur.close()
+    conn.close()
+    return "Done! Description column added!"
 
 
 # ── 15. RUN THE APP ───────────────────────────────────────────────────────────

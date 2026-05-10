@@ -32,7 +32,6 @@ body {
   background: var(--brown-deep);
   color: var(--white);
   overflow-x: hidden;
-  cursor: none;
 }
 
 /* ── Noise ── */
@@ -41,22 +40,6 @@ body::before {
   position: fixed; inset: 0; z-index: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
   background-size: 180px; pointer-events: none; opacity: .55;
-}
-
-/* ── Custom Cursor ── */
-.cursor {
-  position: fixed; width: 12px; height: 12px;
-  background: var(--amber-light); border-radius: 50%;
-  pointer-events: none; z-index: 9999;
-  transform: translate(-50%,-50%);
-  transition: transform .12s ease; mix-blend-mode: screen;
-}
-.cursor-ring {
-  position: fixed; width: 36px; height: 36px;
-  border: 1.5px solid var(--amber); border-radius: 50%;
-  pointer-events: none; z-index: 9998;
-  transform: translate(-50%,-50%);
-  transition: width .25s, height .25s, border-color .25s;
 }
 
 /* ============================================================
@@ -108,21 +91,23 @@ nav {
 .nav-actions { display: flex; align-items: center; gap: 14px; }
 
 .btn-ghost {
-  background: none; border: none; cursor: none;
+  background: none; border: none; cursor: pointer;
   color: var(--text-muted); font-family: 'DM Sans', sans-serif;
   font-size: 14px; padding: 8px 16px; border-radius: 50px;
   transition: color .25s;
+  cursor: pointer
 }
 .btn-ghost:hover { color: var(--white); }
 
 .btn-primary {
   background: var(--amber); color: var(--brown-deep);
-  border: none; cursor: none;
+  border: none; cursor: pointer;
   font-family: 'DM Sans', sans-serif; font-weight: 500;
   font-size: 14px; padding: 10px 24px; border-radius: 50px;
   transition: background .25s, transform .2s, box-shadow .25s;
   box-shadow: 0 4px 18px rgba(212,130,10,.3);
   text-decoration: none; display: inline-block;
+  cursor: pointer;
 }
 .btn-primary:hover {
   background: var(--amber-light); transform: translateY(-2px);
@@ -235,10 +220,11 @@ nav {
 .card-price span { font-size: 13px; color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-weight: 300; }
 .btn-add {
   background: var(--amber); color: var(--brown-deep);
-  border: none; cursor: none; border-radius: 50px;
+  border: none; cursor: pointer; border-radius: 50px;
   padding: 8px 18px; font-size: 13px; font-weight: 500;
   font-family: 'DM Sans', sans-serif;
   transition: background .25s, transform .2s;
+  cursor: pointer;
 }
 .btn-add:hover { background: var(--amber-light); transform: scale(1.05); }
 
@@ -305,7 +291,7 @@ footer {
   padding: 14px 18px; color: var(--white);
   font-family: 'DM Sans', sans-serif; font-size: 15px;
   outline: none; transition: border-color .25s, background .25s;
-  cursor: none;
+  cursor: text;
 }
 .form-group input:focus {
   border-color: var(--amber); background: rgba(212,130,10,.06);
@@ -316,12 +302,13 @@ footer {
 
 .btn-submit {
   width: 100%; background: var(--amber); color: var(--brown-deep);
-  border: none; cursor: none;
+  border: none; cursor: pointer;
   font-family: 'DM Sans', sans-serif; font-weight: 600;
   font-size: 15px; padding: 16px; border-radius: 12px;
   transition: background .25s, transform .2s, box-shadow .25s;
   box-shadow: 0 6px 24px rgba(212,130,10,.35);
   margin-top: 8px; letter-spacing: .03em;
+  cursor: pointer;
 }
 .btn-submit:hover {
   background: var(--amber-light); transform: translateY(-2px);
@@ -343,9 +330,10 @@ footer {
   width: 100%; display: flex; align-items: center; justify-content: center;
   gap: 10px; background: rgba(255,255,255,.06);
   border: 1px solid rgba(255,255,255,.12); border-radius: 12px;
-  padding: 13px; color: var(--white); font-size: 14px; cursor: none;
+  padding: 13px; color: var(--white); font-size: 14px; cursor: pointer;
   font-family: 'DM Sans', sans-serif;
   transition: background .25s, border-color .25s;
+  cursor: pointer;
 }
 .btn-social:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.2); }
 
@@ -462,9 +450,10 @@ footer {
 .filter-tab {
   background: var(--card-bg); border: 1px solid var(--card-border);
   border-radius: 50px; padding: 9px 22px;
-  font-size: 13.5px; color: var(--text-muted); cursor: none;
+  font-size: 13.5px; color: var(--text-muted); cursor: pointer;
   font-family: 'DM Sans', sans-serif;
   transition: all .25s;
+  cursor: pointer;
 }
 .filter-tab:hover, .filter-tab.active {
   background: var(--amber); color: var(--brown-deep);
@@ -526,7 +515,7 @@ h1 em { font-style: italic; color: var(--amber-light); }
 }
 .btn-order {
   background: var(--amber); color: var(--brown-deep);
-  border: none; cursor: none;
+  border: none; cursor: pointer;
   font-family: 'DM Sans', sans-serif; font-weight: 500;
   font-size: 15px; padding: 16px 36px; border-radius: 50px;
   transition: all .3s; box-shadow: 0 6px 28px rgba(212,130,10,.35);
@@ -876,35 +865,6 @@ h1 em { font-style: italic; color: var(--amber-light); }
    Coffee Time — script.js (Shared across all pages)
    ============================================================ */
 
-const cursor     = document.getElementById('cursor');
-const cursorRing = document.getElementById('cursorRing');
-let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
-
-/* ── Cursor movement ── */
-document.addEventListener('mousemove', (e) => {
-  mouseX = e.clientX; mouseY = e.clientY;
-  if (cursor) { cursor.style.left = mouseX + 'px'; cursor.style.top = mouseY + 'px'; }
-});
-
-(function animateRing() {
-  ringX += (mouseX - ringX) * 0.14;
-  ringY += (mouseY - ringY) * 0.14;
-  if (cursorRing) { cursorRing.style.left = ringX + 'px'; cursorRing.style.top = ringY + 'px'; }
-  requestAnimationFrame(animateRing);
-})();
-
-document.querySelectorAll('button, a, .badge, .card, .filter-tab').forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    if (!cursorRing) return;
-    cursorRing.style.width = '56px'; cursorRing.style.height = '56px';
-    cursorRing.style.borderColor = 'var(--amber-light)';
-  });
-  el.addEventListener('mouseleave', () => {
-    if (!cursorRing) return;
-    cursorRing.style.width = '36px'; cursorRing.style.height = '36px';
-    cursorRing.style.borderColor = 'var(--amber)';
-  });
-});
 
 /* ── Counter animation ── */
 function animateCounter(el, target, duration = 1800) {

@@ -43,7 +43,6 @@
         background: var(--brown-deep);
         color: var(--white);
         overflow-x: hidden;
-        cursor: none;
       }
 
       /* ── Noise ── */
@@ -56,34 +55,6 @@
         background-size: 180px;
         pointer-events: none;
         opacity: 0.55;
-      }
-
-      /* ── Custom Cursor ── */
-      .cursor {
-        position: fixed;
-        width: 12px;
-        height: 12px;
-        background: var(--amber-light);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 9999;
-        transform: translate(-50%, -50%);
-        transition: transform 0.12s ease;
-        mix-blend-mode: screen;
-      }
-      .cursor-ring {
-        position: fixed;
-        width: 36px;
-        height: 36px;
-        border: 1.5px solid var(--amber);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 9998;
-        transform: translate(-50%, -50%);
-        transition:
-          width 0.25s,
-          height 0.25s,
-          border-color 0.25s;
       }
 
       /* ============================================================
@@ -179,7 +150,7 @@
       .btn-ghost {
         background: none;
         border: none;
-        cursor: none;
+        cursor: pointer;
         color: var(--text-muted);
         font-family: "DM Sans", sans-serif;
         font-size: 14px;
@@ -195,7 +166,7 @@
         background: var(--amber);
         color: var(--brown-deep);
         border: none;
-        cursor: none;
+        cursor: pointer;
         font-family: "DM Sans", sans-serif;
         font-weight: 500;
         font-size: 14px;
@@ -397,7 +368,7 @@
         background: var(--amber);
         color: var(--brown-deep);
         border: none;
-        cursor: none;
+        cursor: pointer;
         border-radius: 50px;
         padding: 8px 18px;
         font-size: 13px;
@@ -539,7 +510,7 @@
         transition:
           border-color 0.25s,
           background 0.25s;
-        cursor: none;
+        cursor: pointer;
       }
       .form-group input:focus {
         border-color: var(--amber);
@@ -560,7 +531,7 @@
         background: var(--amber);
         color: var(--brown-deep);
         border: none;
-        cursor: none;
+        cursor: pointer;
         font-family: "DM Sans", sans-serif;
         font-weight: 600;
         font-size: 15px;
@@ -615,7 +586,7 @@
         padding: 13px;
         color: var(--white);
         font-size: 14px;
-        cursor: none;
+        cursor: pointer;
         font-family: "DM Sans", sans-serif;
         transition:
           background 0.25s,
@@ -869,7 +840,7 @@
         padding: 9px 22px;
         font-size: 13.5px;
         color: var(--text-muted);
-        cursor: none;
+        cursor: pointer;
         font-family: "DM Sans", sans-serif;
         transition: all 0.25s;
       }
@@ -1009,7 +980,7 @@
         background: var(--amber);
         color: var(--brown-deep);
         border: none;
-        cursor: none;
+        cursor: pointer;
         font-family: "DM Sans", sans-serif;
         font-weight: 500;
         font-size: 15px;
@@ -1544,7 +1515,7 @@
                 display: flex;
                 align-items: flex-start;
                 gap: 10px;
-                cursor: none;
+                cursor: pointer;
               "
             >
               <input
@@ -1627,50 +1598,6 @@
       /* ============================================================
    Coffee Time — script.js (Shared across all pages)
    ============================================================ */
-
-      const cursor = document.getElementById("cursor");
-      const cursorRing = document.getElementById("cursorRing");
-      let mouseX = 0,
-        mouseY = 0,
-        ringX = 0,
-        ringY = 0;
-
-      /* ── Cursor movement ── */
-      document.addEventListener("mousemove", (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        if (cursor) {
-          cursor.style.left = mouseX + "px";
-          cursor.style.top = mouseY + "px";
-        }
-      });
-
-      (function animateRing() {
-        ringX += (mouseX - ringX) * 0.14;
-        ringY += (mouseY - ringY) * 0.14;
-        if (cursorRing) {
-          cursorRing.style.left = ringX + "px";
-          cursorRing.style.top = ringY + "px";
-        }
-        requestAnimationFrame(animateRing);
-      })();
-
-      document
-        .querySelectorAll("button, a, .badge, .card, .filter-tab")
-        .forEach((el) => {
-          el.addEventListener("mouseenter", () => {
-            if (!cursorRing) return;
-            cursorRing.style.width = "56px";
-            cursorRing.style.height = "56px";
-            cursorRing.style.borderColor = "var(--amber-light)";
-          });
-          el.addEventListener("mouseleave", () => {
-            if (!cursorRing) return;
-            cursorRing.style.width = "36px";
-            cursorRing.style.height = "36px";
-            cursorRing.style.borderColor = "var(--amber)";
-          });
-        });
 
       /* ── Counter animation ── */
       function animateCounter(el, target, duration = 1800) {

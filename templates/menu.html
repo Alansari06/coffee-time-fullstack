@@ -32,7 +32,6 @@ body {
   background: var(--brown-deep);
   color: var(--white);
   overflow-x: hidden;
-  cursor: none;
 }
 
 /* ── Noise ── */
@@ -43,21 +42,6 @@ body::before {
   background-size: 180px; pointer-events: none; opacity: .55;
 }
 
-/* ── Custom Cursor ── */
-.cursor {
-  position: fixed; width: 12px; height: 12px;
-  background: var(--amber-light); border-radius: 50%;
-  pointer-events: none; z-index: 9999;
-  transform: translate(-50%,-50%);
-  transition: transform .12s ease; mix-blend-mode: screen;
-}
-.cursor-ring {
-  position: fixed; width: 36px; height: 36px;
-  border: 1.5px solid var(--amber); border-radius: 50%;
-  pointer-events: none; z-index: 9998;
-  transform: translate(-50%,-50%);
-  transition: width .25s, height .25s, border-color .25s;
-}
 
 /* ============================================================
    NAV (shared across all pages)
@@ -108,7 +92,7 @@ nav {
 .nav-actions { display: flex; align-items: center; gap: 14px; }
 
 .btn-ghost {
-  background: none; border: none; cursor: none;
+  background: none; border: none; cursor: pointer;
   color: var(--text-muted); font-family: 'DM Sans', sans-serif;
   font-size: 14px; padding: 8px 16px; border-radius: 50px;
   transition: color .25s;
@@ -117,7 +101,7 @@ nav {
 
 .btn-primary {
   background: var(--amber); color: var(--brown-deep);
-  border: none; cursor: none;
+  border: none; cursor: pointer;
   font-family: 'DM Sans', sans-serif; font-weight: 500;
   font-size: 14px; padding: 10px 24px; border-radius: 50px;
   transition: background .25s, transform .2s, box-shadow .25s;
@@ -235,7 +219,7 @@ nav {
 .card-price span { font-size: 13px; color: var(--text-muted); font-family: 'DM Sans', sans-serif; font-weight: 300; }
 .btn-add {
   background: var(--amber); color: var(--brown-deep);
-  border: none; cursor: none; border-radius: 50px;
+  border: none; cursor: pointer; border-radius: 50px;
   padding: 8px 18px; font-size: 13px; font-weight: 500;
   font-family: 'DM Sans', sans-serif;
   transition: background .25s, transform .2s;
@@ -305,7 +289,7 @@ footer {
   padding: 14px 18px; color: var(--white);
   font-family: 'DM Sans', sans-serif; font-size: 15px;
   outline: none; transition: border-color .25s, background .25s;
-  cursor: none;
+  cursor: pointer;
 }
 .form-group input:focus {
   border-color: var(--amber); background: rgba(212,130,10,.06);
@@ -316,7 +300,7 @@ footer {
 
 .btn-submit {
   width: 100%; background: var(--amber); color: var(--brown-deep);
-  border: none; cursor: none;
+  border: none; cursor: pointer;
   font-family: 'DM Sans', sans-serif; font-weight: 600;
   font-size: 15px; padding: 16px; border-radius: 12px;
   transition: background .25s, transform .2s, box-shadow .25s;
@@ -343,7 +327,7 @@ footer {
   width: 100%; display: flex; align-items: center; justify-content: center;
   gap: 10px; background: rgba(255,255,255,.06);
   border: 1px solid rgba(255,255,255,.12); border-radius: 12px;
-  padding: 13px; color: var(--white); font-size: 14px; cursor: none;
+  padding: 13px; color: var(--white); font-size: 14px; cursor: pointer;
   font-family: 'DM Sans', sans-serif;
   transition: background .25s, border-color .25s;
 }
@@ -462,7 +446,7 @@ footer {
 .filter-tab {
   background: var(--card-bg); border: 1px solid var(--card-border);
   border-radius: 50px; padding: 9px 22px;
-  font-size: 13.5px; color: var(--text-muted); cursor: none;
+  font-size: 13.5px; color: var(--text-muted); cursor: pointer;
   font-family: 'DM Sans', sans-serif;
   transition: all .25s;
 }
@@ -526,7 +510,7 @@ h1 em { font-style: italic; color: var(--amber-light); }
 }
 .btn-order {
   background: var(--amber); color: var(--brown-deep);
-  border: none; cursor: none;
+  border: none; cursor: pointer;
   font-family: 'DM Sans', sans-serif; font-weight: 500;
   font-size: 15px; padding: 16px 36px; border-radius: 50px;
   transition: all .3s; box-shadow: 0 6px 28px rgba(212,130,10,.35);
@@ -854,251 +838,52 @@ h1 em { font-style: italic; color: var(--amber-light); }
   </div>
 
   <!-- Cards Grid -->
+  <!-- Cards Grid — database se aata hai -->
   <div class="cards-grid">
 
-    <!-- HOT -->
-    <div class="card" data-cat="hot">
-      <div class="card-img-wrap">
-        <!-- Image: images/espresso.jpg  |  URL: https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?w=600&q=80 -->
-        <img class="card-img" src="https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?w=600&q=80" alt="Espresso" onerror="this.src='https://placehold.co/600x400/2b1100/f0a830?text=Espresso'"/>
-      </div>
-      <div class="card-body">
-        <span class="card-tag">Hot Coffee</span>
-        <div class="card-title" data-name="Classic Espresso" data-price="180" data-cat="hot">Classic Espresso</div>
-        <div class="card-desc">A bold, concentrated shot of our finest single-origin Arabica beans, with a rich golden crema.</div>
-        <div class="card-footer">
-          <div class="card-price">₹180 <span>/ shot</span></div>
-          <button class="btn-add" onclick="addToCart(this)">Add +</button>
-        </div>
-      </div>
-    </div>
+    {% for item in menu_items %}
+    <div class="card" data-cat="{{ item.category }}">
 
-    <div class="card" data-cat="hot">
+      <!-- item image -->
       <div class="card-img-wrap">
-        <!-- Image: images/cappuccino.jpg  |  URL: https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&q=80 -->
-        <img class="card-img" src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&q=80" alt="Cappuccino" onerror="this.src='https://placehold.co/600x400/2b1100/f0a830?text=Cappuccino'"/>
+        <img class="card-img"
+             src="{{ item.image_url if item.image_url else 'https://placehold.co/600x400/2b1100/f0a830?text=' + item.name }}"
+             alt="{{ item.name }}"
+             onerror="this.src='https://placehold.co/600x400/2b1100/f0a830?text=Coffee'"/>
       </div>
-      <div class="card-body">
-        <span class="card-tag">Hot Coffee</span>
-        <div class="card-title" data-name="Creamy Cappuccino" data-price="220" data-cat="hot">Creamy Cappuccino</div>
-        <div class="card-desc">Equal parts espresso, steamed milk, and silky foam — the Italian classic done to perfection.</div>
-        <div class="card-footer">
-          <div class="card-price">₹220 <span>/ cup</span></div>
-          <button class="btn-add" onclick="addToCart(this)">Add +</button>
-        </div>
-      </div>
-    </div>
 
-    <div class="card" data-cat="hot">
-      <div class="card-img-wrap">
-        <!-- Image: images/latte.jpg  |  URL: https://images.unsplash.com/photo-1561882468-9110d70d4f7b?w=600&q=80 -->
-        <img class="card-img" src="https://images.unsplash.com/photo-1561882468-9110d70d4f7b?w=600&q=80" alt="Latte" onerror="this.src='https://placehold.co/600x400/2b1100/f0a830?text=Latte'"/>
-      </div>
+      <!-- item details -->
       <div class="card-body">
-        <span class="card-tag">Hot Coffee</span>
-        <div class="card-title" data-name="Velvet Latte" data-price="200" data-cat="hot">Velvet Latte</div>
-        <div class="card-desc">Smooth espresso blended with perfectly steamed milk, finished with a delicate latte art pour.</div>
-        <div class="card-footer">
-          <div class="card-price">₹200 <span>/ cup</span></div>
-          <button class="btn-add" onclick="addToCart(this)">Add +</button>
-        </div>
-      </div>
-    </div>
 
-    <div class="card" data-cat="hot">
-      <div class="card-img-wrap">
-        <!-- Image: images/americano.jpg  |  URL: https://images.unsplash.com/photo-1497515114629-f71d768fd07c?w=600&q=80 -->
-        <img class="card-img" src="https://images.unsplash.com/photo-1497515114629-f71d768fd07c?w=600&q=80" alt="Americano" onerror="this.src='https://placehold.co/600x400/2b1100/f0a830?text=Americano'"/>
-      </div>
-      <div class="card-body">
-        <span class="card-tag">Hot Coffee</span>
-        <div class="card-title" data-name="Black Americano" data-price="160" data-cat="hot">Black Americano</div>
-        <div class="card-desc">Bold espresso diluted with hot water for a smooth, full-bodied black coffee experience.</div>
-        <div class="card-footer">
-          <div class="card-price">₹160 <span>/ cup</span></div>
-          <button class="btn-add" onclick="addToCart(this)">Add +</button>
-        </div>
-      </div>
-    </div>
+        <!-- category tag -->
+        <span class="card-tag">
+          {% if item.category == 'hot' %}Hot Coffee
+          {% elif item.category == 'cold' %}Cold Coffee
+          {% else %}Food{% endif %}
+        </span>
 
-    <div class="card" data-cat="hot">
-      <div class="card-img-wrap">
-        <!-- Image: images/mocha.jpg  |  URL: https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?w=600&q=80 -->
-        <img class="card-img" src="https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?w=600&q=80" alt="Mocha" onerror="this.src='https://placehold.co/600x400/2b1100/f0a830?text=Mocha'"/>
-      </div>
-      <div class="card-body">
-        <span class="card-tag">Hot Coffee</span>
-        <div class="card-title" data-name="Dark Mocha" data-price="260" data-cat="hot">Dark Mocha</div>
-        <div class="card-desc">Rich espresso meets Belgian chocolate and velvety steamed milk, topped with a cocoa dusting.</div>
-        <div class="card-footer">
-          <div class="card-price">₹260 <span>/ cup</span></div>
-          <button class="btn-add" onclick="addToCart(this)">Add +</button>
+        <!-- item name — data attributes add to cart ke liye -->
+        <div class="card-title"
+             data-name="{{ item.name }}"
+             data-price="{{ item.price }}"
+             data-cat="{{ item.category }}">
+          {{ item.name }}
         </div>
-      </div>
-    </div>
 
-    <div class="card" data-cat="hot">
-      <div class="card-img-wrap">
-        <!-- Image: images/macchiato.jpg  |  URL: https://images.unsplash.com/photo-1485808191679-5f86510bd9d4?w=600&q=80 -->
-        <img class="card-img" src="https://images.unsplash.com/photo-1485808191679-5f86510bd9d4?w=600&q=80" alt="Macchiato" onerror="this.src='https://placehold.co/600x400/2b1100/f0a830?text=Macchiato'"/>
-      </div>
-      <div class="card-body">
-        <span class="card-tag">Hot Coffee</span>
-        <div class="card-title" data-name="Caramel Macchiato" data-price="240" data-cat="hot">Caramel Macchiato</div>
-        <div class="card-desc">Layered vanilla, steamed milk, and espresso, drizzled with house-made caramel sauce.</div>
-        <div class="card-footer">
-          <div class="card-price">₹240 <span>/ cup</span></div>
-          <button class="btn-add" onclick="addToCart(this)">Add +</button>
+        <!-- item description -->
+        <div class="card-desc">
+          {{ item.description or "A delicious coffee crafted with care." }}
         </div>
-      </div>
-    </div>
 
-    <!-- COLD -->
-    <div class="card" data-cat="cold">
-      <div class="card-img-wrap">
-        <!-- Image: images/cold-brew.jpg  |  URL: https://images.unsplash.com/photo-1517959105821-eaf2591984d2?w=600&q=80 -->
-        <img class="card-img" src="https://images.unsplash.com/photo-1517959105821-eaf2591984d2?w=600&q=80" alt="Cold Brew" onerror="this.src='https://placehold.co/600x400/2b1100/f0a830?text=Cold+Brew'"/>
-      </div>
-      <div class="card-body">
-        <span class="card-tag">Cold Coffee</span>
-        <div class="card-title" data-name="Signature Cold Brew" data-price="280" data-cat="cold">Signature Cold Brew</div>
-        <div class="card-desc">Steeped for 18 hours in cold water — smooth, low-acid, and intensely rich with zero bitterness.</div>
+        <!-- price aur add button -->
         <div class="card-footer">
-          <div class="card-price">₹280 <span>/ glass</span></div>
+          <div class="card-price">₹{{ item.price }}</div>
           <button class="btn-add" onclick="addToCart(this)">Add +</button>
         </div>
-      </div>
-    </div>
 
-    <div class="card" data-cat="cold">
-      <div class="card-img-wrap">
-        <!-- Image: images/iced-latte.jpg  |  URL: https://images.unsplash.com/photo-1562347036-8c3e92b81b14?w=600&q=80 -->
-        <img class="card-img" src="https://images.unsplash.com/photo-1562347036-8c3e92b81b14?w=600&q=80" alt="Iced Latte" onerror="this.src='https://placehold.co/600x400/2b1100/f0a830?text=Iced+Latte'"/>
-      </div>
-      <div class="card-body">
-        <span class="card-tag">Cold Coffee</span>
-        <div class="card-title" data-name="Iced Latte" data-price="220" data-cat="cold">Iced Latte</div>
-        <div class="card-desc">Chilled espresso poured over ice with fresh cold milk — refreshing and smooth every sip.</div>
-        <div class="card-footer">
-          <div class="card-price">₹220 <span>/ glass</span></div>
-          <button class="btn-add" onclick="addToCart(this)">Add +</button>
-        </div>
       </div>
     </div>
-
-    <div class="card" data-cat="cold">
-      <div class="card-img-wrap">
-        <!-- Image: images/frappe.jpg  |  URL: https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=600&q=80 -->
-        <img class="card-img" src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=600&q=80" alt="Frappe" onerror="this.src='https://placehold.co/600x400/2b1100/f0a830?text=Frappe'"/>
-      </div>
-      <div class="card-body">
-        <span class="card-tag">Cold Coffee</span>
-        <div class="card-title" data-name="Chocolate Frappé" data-price="300" data-cat="cold">Chocolate Frappé</div>
-        <div class="card-desc">Blended espresso, chocolate, ice, and whipped cream — a dessert in a glass.</div>
-        <div class="card-footer">
-          <div class="card-price">₹300 <span>/ glass</span></div>
-          <button class="btn-add" onclick="addToCart(this)">Add +</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- SPECIALTY -->
-    <div class="card" data-cat="specialty">
-      <div class="card-img-wrap">
-        <!-- Image: images/flat-white.jpg  |  URL: https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=600&q=80 -->
-        <img class="card-img" src="https://images.unsplash.com/photo-1577968897966-3d4325b36b61?w=600&q=80" alt="Flat White" onerror="this.src='https://placehold.co/600x400/2b1100/f0a830?text=Flat+White'"/>
-      </div>
-      <div class="card-body">
-        <span class="card-tag">Specialty</span>
-        <div class="card-title" data-name="Flat White" data-price="250" data-cat="specialty">Flat White</div>
-        <div class="card-desc">Ristretto shots with a thin layer of velvety microfoam — the Antipodean favourite for espresso lovers.</div>
-        <div class="card-footer">
-          <div class="card-price">₹250 <span>/ cup</span></div>
-          <button class="btn-add" onclick="addToCart(this)">Add +</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="card" data-cat="specialty">
-      <div class="card-img-wrap">
-        <!-- Image: images/pour-over.jpg  |  URL: https://images.unsplash.com/photo-1498804103079-a6351b050096?w=600&q=80 -->
-        <img class="card-img" src="https://images.unsplash.com/photo-1498804103079-a6351b050096?w=600&q=80" alt="Pour Over" onerror="this.src='https://placehold.co/600x400/2b1100/f0a830?text=Pour+Over'"/>
-      </div>
-      <div class="card-body">
-        <span class="card-tag">Specialty</span>
-        <div class="card-title" data-name="Pour Over" data-price="320" data-cat="specialty">Pour Over</div>
-        <div class="card-desc">Slow-brewed single-origin with precise temperature and timing to unlock every note of flavour.</div>
-        <div class="card-footer">
-          <div class="card-price">₹320 <span>/ cup</span></div>
-          <button class="btn-add" onclick="addToCart(this)">Add +</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="card" data-cat="specialty">
-      <div class="card-img-wrap">
-        <!-- Image: images/dalgona.jpg  |  URL: https://images.unsplash.com/photo-1589396575653-c09c1cf7823c?w=600&q=80 -->
-        <img class="card-img" src="https://images.unsplash.com/photo-1589396575653-c09c1cf7823c?w=600&q=80" alt="Dalgona" onerror="this.src='https://placehold.co/600x400/2b1100/f0a830?text=Dalgona'"/>
-      </div>
-      <div class="card-body">
-        <span class="card-tag">Specialty</span>
-        <div class="card-title" data-name="Dalgona Coffee" data-price="270" data-cat="specialty">Dalgona Coffee</div>
-        <div class="card-desc">Whipped instant coffee cloud floated over creamy oat milk — fluffy, sweet, and Instagram-worthy.</div>
-        <div class="card-footer">
-          <div class="card-price">₹270 <span>/ glass</span></div>
-          <button class="btn-add" onclick="addToCart(this)">Add +</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- FOOD -->
-    <div class="card" data-cat="food">
-      <div class="card-img-wrap">
-        <!-- Image: images/croissant.jpg  |  URL: https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&q=80 -->
-        <img class="card-img" src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&q=80" alt="Croissant" onerror="this.src='https://placehold.co/600x400/2b1100/f0a830?text=Croissant'"/>
-      </div>
-      <div class="card-body">
-        <span class="card-tag">Food</span>
-        <div class="card-title" data-name="Butter Croissant" data-price="120" data-cat="food">Butter Croissant</div>
-        <div class="card-desc">Freshly baked, golden and flaky with layers of pure French butter — the perfect coffee companion.</div>
-        <div class="card-footer">
-          <div class="card-price">₹120 <span>/ piece</span></div>
-          <button class="btn-add" onclick="addToCart(this)">Add +</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="card" data-cat="food">
-      <div class="card-img-wrap">
-        <!-- Image: images/cheesecake.jpg  |  URL: https://images.unsplash.com/photo-1567171466295-4afa63d45416?w=600&q=80 -->
-        <img class="card-img" src="https://images.unsplash.com/photo-1567171466295-4afa63d45416?w=600&q=80" alt="Cheesecake" onerror="this.src='https://placehold.co/600x400/2b1100/f0a830?text=Cheesecake'"/>
-      </div>
-      <div class="card-body">
-        <span class="card-tag">Food</span>
-        <div class="card-title" data-name="NY Cheesecake" data-price="200" data-cat="food">NY Cheesecake</div>
-        <div class="card-desc">Dense, creamy New York–style cheesecake on a graham cracker crust, with berry compote.</div>
-        <div class="card-footer">
-          <div class="card-price">₹200 <span>/ slice</span></div>
-          <button class="btn-add" onclick="addToCart(this)">Add +</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="card" data-cat="food">
-      <div class="card-img-wrap">
-        <!-- Image: images/brownie.jpg  |  URL: https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=600&q=80 -->
-        <img class="card-img" src="https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=600&q=80" alt="Brownie" onerror="this.src='https://placehold.co/600x400/2b1100/f0a830?text=Brownie'"/>
-      </div>
-      <div class="card-body">
-        <span class="card-tag">Food</span>
-        <div class="card-title" data-name="Fudge Brownie" data-price="150" data-cat="food">Fudge Brownie</div>
-        <div class="card-desc">Warm, gooey dark chocolate brownie made with 70% cacao — pairs beautifully with espresso.</div>
-        <div class="card-footer">
-          <div class="card-price">₹150 <span>/ piece</span></div>
-          <button class="btn-add" onclick="addToCart(this)">Add +</button>
-        </div>
-      </div>
-    </div>
+    {% endfor %}
 
   </div><!-- /cards-grid -->
 </section>
@@ -1135,35 +920,6 @@ h1 em { font-style: italic; color: var(--amber-light); }
    Coffee Time — script.js (Shared across all pages)
    ============================================================ */
 
-const cursor     = document.getElementById('cursor');
-const cursorRing = document.getElementById('cursorRing');
-let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
-
-/* ── Cursor movement ── */
-document.addEventListener('mousemove', (e) => {
-  mouseX = e.clientX; mouseY = e.clientY;
-  if (cursor) { cursor.style.left = mouseX + 'px'; cursor.style.top = mouseY + 'px'; }
-});
-
-(function animateRing() {
-  ringX += (mouseX - ringX) * 0.14;
-  ringY += (mouseY - ringY) * 0.14;
-  if (cursorRing) { cursorRing.style.left = ringX + 'px'; cursorRing.style.top = ringY + 'px'; }
-  requestAnimationFrame(animateRing);
-})();
-
-document.querySelectorAll('button, a, .badge, .card, .filter-tab').forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    if (!cursorRing) return;
-    cursorRing.style.width = '56px'; cursorRing.style.height = '56px';
-    cursorRing.style.borderColor = 'var(--amber-light)';
-  });
-  el.addEventListener('mouseleave', () => {
-    if (!cursorRing) return;
-    cursorRing.style.width = '36px'; cursorRing.style.height = '36px';
-    cursorRing.style.borderColor = 'var(--amber)';
-  });
-});
 
 /* ── Counter animation ── */
 function animateCounter(el, target, duration = 1800) {

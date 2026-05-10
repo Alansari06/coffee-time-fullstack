@@ -67,9 +67,11 @@
   <table>
     <thead>
       <tr>
+        <th>Image</th>
         <th>ID</th>
         <th>Item Name</th>
         <th>Price</th>
+        <th>Image URL</th>
         <th>Category</th>
         <th>Edit</th>
         <th>Delete</th>
@@ -79,7 +81,7 @@
       <!-- no items message -->
       {% if not items %}
       <tr>
-        <td colspan="6" style="text-align: center; padding: 30px">
+        <td colspan="7" style="text-align: center; padding: 30px">
           No menu items yet!
         </td>
       </tr>
@@ -88,6 +90,22 @@
       <!-- show each item in a row -->
       {% for item in items %}
       <tr>
+        <!-- image cell -->
+        <td>
+          {% if item.image_url %}
+          <img
+            src="{{ item.image_url }}"
+            style="
+              width: 60px;
+              height: 60px;
+              border-radius: 8px;
+              object-fit: cover;
+            "
+          />
+          {% else %}
+          <span style="color: #888; font-size: 12px">No Image</span>
+          {% endif %}
+        </td>
         <td>{{ item.id }}</td>
 
         <!-- edit form inline -->
@@ -115,6 +133,21 @@
                 border: 1px solid #eee;
                 border-radius: 6px;
                 width: 80px;
+              "
+            />
+          </td>
+
+          <td>
+            <input
+              type="text"
+              name="image_url"
+              value="{{ item.image_url }}"
+              placeholder="Image URL"
+              style="
+                padding: 6px;
+                border: 1px solid #eee;
+                border-radius: 6px;
+                width: 150px;
               "
             />
           </td>
