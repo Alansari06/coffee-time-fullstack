@@ -1020,6 +1020,16 @@ def admin_users():
 
         return render_template("admin/users.html", users=users)
     
+@app.route("/admin/check-users")
+def check_users():
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT id, first_name, created_at FROM users ORDER BY id")
+    all_users = cur.fetchall()
+    cur.close()
+    conn.close()
+    return str(all_users)
+    
 
 
 # ── 15. RUN THE APP ───────────────────────────────────────────────────────────
