@@ -428,7 +428,7 @@ def account():
             SELECT o.id, o.total_amount, o.status, o.created_at
             FROM orders o
             WHERE o.user_email = %s
-            ORDER BY o.created_at DESC
+            ORDER BY o.created_at ASC
         """, (user["email"],))
 
         # fetchall() returns a list of all matching rows
@@ -924,7 +924,7 @@ def admin_contacts():
     cur.execute("""
         SELECT id, name, email, subject, message, created_at, is_read
         FROM contacts
-        ORDER BY created_at DESC
+        ORDER BY created_at ASC
     """)
 
     rows = cur.fetchall()
@@ -1001,7 +1001,7 @@ def admin_users():
     cur.execute("""
         SELECT id, first_name, last_name, email, phone, created_at 
         FROM users 
-        ORDER BY created_at DESC
+        ORDER BY created_at ASC
     """)
     rows = cur.fetchall()
     users = []
@@ -1014,22 +1014,10 @@ def admin_users():
             "phone":      row[4],
             "joined":     row[5],
         })
-
-        cur.close()
-        conn.close()
-
-        return render_template("admin/users.html", users=users)
-    
-@app.route("/admin/check-users")
-def check_users():
-    conn = get_db()
-    cur = conn.cursor()
-    cur.execute("SELECT id, first_name, created_at FROM users ORDER BY id")
-    all_users = cur.fetchall()
     cur.close()
     conn.close()
-    return str(all_users)
-    
+
+    return render_template("admin/users.html", users=users)
 
 
 # ── 15. RUN THE APP ───────────────────────────────────────────────────────────
