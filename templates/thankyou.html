@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome — Coffee Time</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #1a0a00;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .box {
+      text-align: center;
+      padding: 50px 40px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 24px;
+      max-width: 440px;
+      width: 90%;
+    }
+
+    .emoji { font-size: 52px; margin-bottom: 20px; }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    h1 em { font-style: italic; color: #f0a830; }
+
+    p {
+      color: rgba(255,255,255,.65);
+      font-size: 15px;
+      margin-bottom: 35px;
+      line-height: 1.6;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+
+    .btn-yes {
+      background: #d4820a;
+      color: #1a0a00;
+      border: none;
+      padding: 13px 28px;
+      border-radius: 50px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .2s;
+    }
+
+    .btn-yes:hover { background: #f0a830; }
+
+    .btn-no {
+      background: transparent;
+      color: rgba(255,255,255,.65);
+      border: 1px solid rgba(255,255,255,.2);
+      padding: 13px 28px;
+      border-radius: 50px;
+      font-size: 15px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all .2s;
+    }
+
+    .btn-no:hover {
+      border-color: #f0a830;
+      color: #f0a830;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="emoji">☕</div>
+    <h1>Welcome to <em>Coffee Time!</em></h1>
+    <p>Account successfully created!<br>Do you want to login now?</p>
+    <div class="buttons">
+      <a href="/login" class="btn-yes">Yes, Login</a>
+      <a href="/" class="btn-no">No, Go Home</a>
+    </div>
+  </div>
+</body>
+</html>

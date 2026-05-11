@@ -269,7 +269,8 @@ def signup():
 
     # If already logged in, no need to sign up again — go home
     if "user_email" in session:
-        return redirect(url_for("home"))
+        # signup hone ke baad thankyou page pe bhejo
+        return redirect(url_for("thankyou"))
 
     # Form was submitted (user clicked Sign Up button)
     if request.method == "POST":
@@ -333,8 +334,10 @@ def signup():
             # Terminal log for debugging
             print(f"✅ New signup: {first_name} {last_name} | {email}")
 
+            session.clear()  # Clear session to log out the user after signup
+
             # Redirect to home page after successful signup
-            return redirect(url_for("home"))
+            return redirect(url_for("thankyou"))
 
         except Exception as e:
             print(f"❌ Signup error: {e}")
@@ -710,6 +713,10 @@ def logout():
 
     # Send to home page after logout
     return redirect(url_for("home"))
+
+@app.route("/thankyou")
+def thankyou():
+    return render_template("thankyou.html")
 
 #logout route from admin panel
 @app.route('/admin/logout')
