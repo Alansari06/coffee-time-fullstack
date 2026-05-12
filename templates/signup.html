@@ -1213,197 +1213,344 @@
           padding: 32px 24px;
         }
       }
-    
-/* ── Hamburger Menu ── */
-.nav-hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-  z-index: 200;
-}
-.nav-hamburger span {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: var(--amber-light);
-  border-radius: 2px;
-  transition: all .3s;
-}
-.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.nav-hamburger.open span:nth-child(2) { opacity: 0; }
-.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-@media (max-width:900px) {
-  .nav-hamburger { display: flex; }
-  .nav-actions { display: none; }
-  .nav-links {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(26,10,0,.97);
-    backdrop-filter: blur(20px);
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 28px;
-    z-index: 150;
-  }
-  .nav-links.open { display: flex; }
-  .nav-links a { font-size: 20px; }
-  .nav-links .mobile-auth { display: flex !important; flex-direction: row; gap: 12px; margin-top: 8px; }
-}
+      /* ── Hamburger Menu ── */
+      .nav-hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 5px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        z-index: 200;
+      }
+      .nav-hamburger span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        background: var(--amber-light);
+        border-radius: 2px;
+        transition: all 0.3s;
+      }
+      .nav-hamburger.open span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+      .nav-hamburger.open span:nth-child(2) {
+        opacity: 0;
+      }
+      .nav-hamburger.open span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
 
-/* ── Cart table responsive ── */
-@media (max-width:600px) {
-  .cart-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .cart-section { padding: 40px 16px 60px; }
-  .cart-total { flex-direction: column; gap: 8px; text-align: center; }
+      @media (max-width: 900px) {
+        .nav-hamburger {
+          display: flex;
+        }
+        .nav-actions {
+          display: none;
+        }
+        .nav-links {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(26, 10, 0, 0.97);
+          backdrop-filter: blur(20px);
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 28px;
+          z-index: 150;
+        }
+        .nav-links.open {
+          display: flex;
+        }
+        .nav-links a {
+          font-size: 20px;
+        }
+        .nav-links .mobile-auth {
+          display: flex !important;
+          flex-direction: row;
+          gap: 12px;
+          margin-top: 8px;
+        }
+      }
 
-  /* Hero mobile */
-  .hero-section { min-height: auto; }
-  .hero-body { flex-direction: column; padding: 60px 20px 20px; position: relative; z-index: 2; }
-  .hero-left { max-width: 100%; position: relative; z-index: 3; }
-  .hero-image { position: relative; right: auto; top: auto; transform: none; width: 100%; max-width: 320px; margin: 20px auto 0; display: block; animation: none; opacity: 0.35; }
-  .badge { display: none; }
-  .stats-bar { justify-content: center; flex-wrap: wrap; }
+      /* ── Cart table responsive ── */
+      @media (max-width: 600px) {
+        .cart-table {
+          display: block;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+        .cart-section {
+          padding: 40px 16px 60px;
+        }
+        .cart-total {
+          flex-direction: column;
+          gap: 8px;
+          text-align: center;
+        }
 
-  /* Contact */
-  .contact-wrap { padding: 32px 16px 60px; }
+        /* Hero mobile */
+        .hero-section {
+          min-height: auto;
+        }
+        .hero-body {
+          flex-direction: column;
+          padding: 60px 20px 20px;
+          position: relative;
+          z-index: 2;
+        }
+        .hero-left {
+          max-width: 100%;
+          position: relative;
+          z-index: 3;
+        }
+        .hero-image {
+          position: relative;
+          right: auto;
+          top: auto;
+          transform: none;
+          width: 100%;
+          max-width: 320px;
+          margin: 20px auto 0;
+          display: block;
+          animation: none;
+          opacity: 0.35;
+        }
+        .badge {
+          display: none;
+        }
+        .stats-bar {
+          justify-content: center;
+          flex-wrap: wrap;
+        }
 
-  /* Account */
-  .account-section { padding: 32px 16px 60px; }
-  .perks-list { grid-template-columns: 1fr; }
+        /* Contact */
+        .contact-wrap {
+          padding: 32px 16px 60px;
+        }
 
-  /* Special hero */
-  .special-hero-content { padding: 28px 20px; }
-  .special-hero-content h3 { font-size: 24px; }
-  .price-new { font-size: 28px; }
+        /* Account */
+        .account-section {
+          padding: 32px 16px 60px;
+        }
+        .perks-list {
+          grid-template-columns: 1fr;
+        }
 
-  /* Nav actions on mobile — hide text labels if needed */
-  .nav-actions { gap: 8px; }
-  .btn-ghost { padding: 8px 10px; font-size: 13px; }
-  .btn-primary { padding: 9px 14px; font-size: 13px; }
-}
+        /* Special hero */
+        .special-hero-content {
+          padding: 28px 20px;
+        }
+        .special-hero-content h3 {
+          font-size: 24px;
+        }
+        .price-new {
+          font-size: 28px;
+        }
 
-@media (max-width:400px) {
-  .auth-box { padding: 28px 16px; }
-  .values-grid { grid-template-columns: 1fr; }
-}
-</style>
-  
+        /* Nav actions on mobile — hide text labels if needed */
+        .nav-actions {
+          gap: 8px;
+        }
+        .btn-ghost {
+          padding: 8px 10px;
+          font-size: 13px;
+        }
+        .btn-primary {
+          padding: 9px 14px;
+          font-size: 13px;
+        }
+      }
 
+      @media (max-width: 400px) {
+        .auth-box {
+          padding: 28px 16px;
+        }
+        .values-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
 
-<style id="mfix">
-/* NAV HAMBURGER */
-.nav-hamburger{display:none;flex-direction:column;gap:6px;background:none;border:none;padding:6px;cursor:pointer;position:relative;z-index:99999;}
-.nav-hamburger span{display:block;width:26px;height:2.5px;background:var(--amber-light);border-radius:3px;transition:all .3s;}
-.nav-hamburger.open span:nth-child(1){transform:translateY(8.5px) rotate(45deg);}
-.nav-hamburger.open span:nth-child(2){opacity:0;}
-.nav-hamburger.open span:nth-child(3){transform:translateY(-8.5px) rotate(-45deg);}
+    <style id="mfix">
+      /* NAV HAMBURGER */
+      .nav-hamburger {
+        display: none;
+        flex-direction: column;
+        gap: 6px;
+        background: none;
+        border: none;
+        padding: 6px;
+        cursor: pointer;
+        position: relative;
+        z-index: 99999;
+      }
+      .nav-hamburger span {
+        display: block;
+        width: 26px;
+        height: 2.5px;
+        background: var(--amber-light);
+        border-radius: 3px;
+        transition: all 0.3s;
+      }
+      .nav-hamburger.open span:nth-child(1) {
+        transform: translateY(8.5px) rotate(45deg);
+      }
+      .nav-hamburger.open span:nth-child(2) {
+        opacity: 0;
+      }
+      .nav-hamburger.open span:nth-child(3) {
+        transform: translateY(-8.5px) rotate(-45deg);
+      }
 
-/* MOBILE NAV OVERLAY */
-.nav-overlay{
-  display:none;
-  position:fixed;
-  top:0;left:0;right:0;bottom:0;
-  background:#1a0a00;
-  z-index:99990;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:32px;
-}
-.nav-overlay.open{display:flex;}
-.nav-overlay a{
-  color:#fff;
-  text-decoration:none;
-  font-size:22px;
-  font-family:'DM Sans',sans-serif;
-  font-weight:400;
-  letter-spacing:.05em;
-  transition:color .2s;
-}
-.nav-overlay a:hover{color:var(--amber-light);}
-.nav-overlay .overlay-auth{display:flex;gap:14px;margin-top:8px;}
-.nav-close{
-  position:absolute;top:24px;right:24px;
-  background:none;border:none;color:#fff;
-  font-size:32px;cursor:pointer;line-height:1;
-  z-index:99999;
-}
+      /* MOBILE NAV OVERLAY */
+      .nav-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #1a0a00;
+        z-index: 99990;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 32px;
+      }
+      .nav-overlay.open {
+        display: flex;
+      }
+      .nav-overlay a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 22px;
+        font-family: "DM Sans", sans-serif;
+        font-weight: 400;
+        letter-spacing: 0.05em;
+        transition: color 0.2s;
+      }
+      .nav-overlay a:hover {
+        color: var(--amber-light);
+      }
+      .nav-overlay .overlay-auth {
+        display: flex;
+        gap: 14px;
+        margin-top: 8px;
+      }
+      .nav-close {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 32px;
+        cursor: pointer;
+        line-height: 1;
+        z-index: 99999;
+      }
 
-@media(max-width:900px){
-  .nav-hamburger{display:flex !important;}
-  .nav-actions{display:none !important;}
-  .nav-links{display:none !important;}
-}
-@media(min-width:901px){
-  .nav-overlay{display:none !important;}
-  .nav-hamburger{display:none !important;}
-}
+      @media (max-width: 900px) {
+        .nav-hamburger {
+          display: flex !important;
+        }
+        .nav-actions {
+          display: none !important;
+        }
+        .nav-links {
+          display: none !important;
+        }
+      }
+      @media (min-width: 901px) {
+        .nav-overlay {
+          display: none !important;
+        }
+        .nav-hamburger {
+          display: none !important;
+        }
+      }
 
-/* HERO MOBILE FIX */
-@media(max-width:900px){
-  .hero-section{min-height:auto !important;overflow:hidden !important;}
-  .hero-body{
-    display:flex !important;
-    flex-direction:column !important;
-    align-items:flex-start !important;
-    padding:50px 20px 10px !important;
-    position:relative !important;
-    min-height:auto !important;
-  }
-  .hero-left{
-    width:100% !important;
-    max-width:100% !important;
-    position:relative !important;
-    z-index:10 !important;
-  }
-  h1{font-size:36px !important;}
-  .hero-desc{font-size:14px !important;max-width:100% !important;}
-  .hero-image{
-    position:relative !important;
-    top:auto !important;right:auto !important;
-    bottom:auto !important;left:auto !important;
-    transform:none !important;
-    width:65% !important;
-    max-width:240px !important;
-    margin:16px auto 0 !important;
-    display:block !important;
-    animation:none !important;
-    opacity:.55 !important;
-  }
-  .badge-1,.badge-2{display:none !important;}
-  .stats-bar{flex-wrap:wrap !important;gap:20px !important;padding:24px 20px 32px !important;}
-  .stat-divider{display:none !important;}
-}
-</style>
-</head>
+      /* HERO MOBILE FIX */
+      @media (max-width: 900px) {
+        .hero-section {
+          min-height: auto !important;
+          overflow: hidden !important;
+        }
+        .hero-body {
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: flex-start !important;
+          padding: 50px 20px 10px !important;
+          position: relative !important;
+          min-height: auto !important;
+        }
+        .hero-left {
+          width: 100% !important;
+          max-width: 100% !important;
+          position: relative !important;
+          z-index: 10 !important;
+        }
+        h1 {
+          font-size: 36px !important;
+        }
+        .hero-desc {
+          font-size: 14px !important;
+          max-width: 100% !important;
+        }
+        .hero-image {
+          position: relative !important;
+          top: auto !important;
+          right: auto !important;
+          bottom: auto !important;
+          left: auto !important;
+          transform: none !important;
+          width: 65% !important;
+          max-width: 240px !important;
+          margin: 16px auto 0 !important;
+          display: block !important;
+          animation: none !important;
+          opacity: 0.55 !important;
+        }
+        .badge-1,
+        .badge-2 {
+          display: none !important;
+        }
+        .stats-bar {
+          flex-wrap: wrap !important;
+          gap: 20px !important;
+          padding: 24px 20px 32px !important;
+        }
+        .stat-divider {
+          display: none !important;
+        }
+      }
+    </style>
+  </head>
   <body>
-
     <!-- NAV -->
     <nav>
-<button class="nav-hamburger" id="navHamburger" aria-label="Open menu">
-    <span></span><span></span><span></span>
-  </button>
+      <button class="nav-hamburger" id="navHamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
       <a href="/" class="logo">
         <div class="logo-icon">☕</div>
         <div class="logo-text"><span>Coffee</span><span>Time</span></div>
       </a>
-  <ul class="nav-links">
-    <li><a href="/">Home</a></li>
-    <li><a href="/about">About Us</a></li>
-    <li><a href="/menu">Menu</a></li>
-    <li><a href="/special">Our Specials</a></li>
-    <li><a href="/contact">Contact</a></li>
-    <li><a href="/cart">🛒 Cart</a></li>
-  
-    
-  </ul>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/menu">Menu</a></li>
+        <li><a href="/special">Our Specials</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/cart">🛒 Cart</a></li>
+      </ul>
       <div class="nav-actions">
         <a href="/login" class="btn-ghost">Sign In</a>
         <a
@@ -1415,20 +1562,20 @@
       </div>
     </nav>
 
-<div class="nav-overlay" id="navOverlay">
-  <button class="nav-close" id="navClose">✕</button>
-  <a href="/">Home</a>
-    <a href="/about">About Us</a>
-    <a href="/menu">Menu</a>
-    <a href="/special">Our Specials</a>
-    <a href="/contact">Contact</a>
-    <a href="/cart">🛒 Cart</a>
-  
-    <div class="overlay-auth">
-      <a href="/login" style="color:var(--amber-light);">Sign In</a>
-      <a href="/signup" class="btn-primary">Sign Up</a>
+    <div class="nav-overlay" id="navOverlay">
+      <button class="nav-close" id="navClose">✕</button>
+      <a href="/">Home</a>
+      <a href="/about">About Us</a>
+      <a href="/menu">Menu</a>
+      <a href="/special">Our Specials</a>
+      <a href="/contact">Contact</a>
+      <a href="/cart">🛒 Cart</a>
+
+      <div class="overlay-auth">
+        <a href="/login" style="color: var(--amber-light)">Sign In</a>
+        <a href="/signup" class="btn-primary">Sign Up</a>
+      </div>
     </div>
-</div>
 
     <!-- AUTH PAGE -->
     <div class="auth-page">
@@ -1467,7 +1614,12 @@
           <div class="form-row">
             <div class="form-group">
               <label>First Name</label>
-              <input type="text" name="first_name" placeholder="John" required />
+              <input
+                type="text"
+                name="first_name"
+                placeholder="John"
+                required
+              />
             </div>
             <div class="form-group">
               <label>Last Name</label>
@@ -1477,7 +1629,12 @@
 
           <div class="form-group">
             <label>Email Address</label>
-            <input type="email" name="email" placeholder="you@example.com" required />
+            <input
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              required
+            />
           </div>
 
           <div class="form-group">
@@ -1497,7 +1654,12 @@
 
           <div class="form-group">
             <label>Confirm Password</label>
-            <input type="password" name="confirm_password" placeholder="Re-enter password" required />
+            <input
+              type="password"
+              name="confirm_password"
+              placeholder="Re-enter password"
+              required
+            />
           </div>
 
           <div
@@ -1541,7 +1703,17 @@
           </div>
 
           {% if error %}
-          <div style="background:rgba(220,50,50,.12);border:1px solid rgba(220,50,50,.3);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13.5px;color:#ff7b7b;">
+          <div
+            style="
+              background: rgba(220, 50, 50, 0.12);
+              border: 1px solid rgba(220, 50, 50, 0.3);
+              border-radius: 10px;
+              padding: 12px 16px;
+              margin-bottom: 16px;
+              font-size: 13.5px;
+              color: #ff7b7b;
+            "
+          >
             ⚠️ {{ error }}
           </div>
           {% endif %}
@@ -1592,7 +1764,7 @@
       </div>
     </div>
 
-    <script>
+    <script type="module">
       /* ============================================================
    Coffee Time — script.js (Shared across all pages)
    ============================================================ */
@@ -1724,43 +1896,95 @@
           revealObs.observe(el);
         });
       }
-    
-/* ── Hamburger toggle ── */
-const hamburger = document.getElementById("navHamburger");
-const navLinks  = document.querySelector(".nav-links");
-if (hamburger && navLinks) {
-  hamburger.addEventListener("click", () => {
-    hamburger.classList.toggle("open");
-    navLinks.classList.toggle("open");
-  });
-  navLinks.querySelectorAll("a").forEach(a => {
-    a.addEventListener("click", () => {
-      hamburger.classList.remove("open");
-      navLinks.classList.remove("open");
-    });
-  });
-}
 
-/* Hamburger nav */
-(function(){
-  var btn     = document.getElementById('navHamburger');
-  var overlay = document.getElementById('navOverlay');
-  var close   = document.getElementById('navClose');
-  if(!btn || !overlay) return;
-  btn.addEventListener('click', function(){
-    overlay.classList.add('open');
-    document.body.style.overflow='hidden';
-  });
-  function closeNav(){
-    overlay.classList.remove('open');
-    document.body.style.overflow='';
-  }
-  if(close) close.addEventListener('click', closeNav);
-  overlay.querySelectorAll('a').forEach(function(a){
-    a.addEventListener('click', closeNav);
-  });
-})();
+      /* ── Hamburger toggle ── */
+      const hamburger = document.getElementById("navHamburger");
+      const navLinks = document.querySelector(".nav-links");
+      if (hamburger && navLinks) {
+        hamburger.addEventListener("click", () => {
+          hamburger.classList.toggle("open");
+          navLinks.classList.toggle("open");
+        });
+        navLinks.querySelectorAll("a").forEach((a) => {
+          a.addEventListener("click", () => {
+            hamburger.classList.remove("open");
+            navLinks.classList.remove("open");
+          });
+        });
+      }
 
-</script>
+      /* Hamburger nav */
+      (function () {
+        var btn = document.getElementById("navHamburger");
+        var overlay = document.getElementById("navOverlay");
+        var close = document.getElementById("navClose");
+        if (!btn || !overlay) return;
+        btn.addEventListener("click", function () {
+          overlay.classList.add("open");
+          document.body.style.overflow = "hidden";
+        });
+        function closeNav() {
+          overlay.classList.remove("open");
+          document.body.style.overflow = "";
+        }
+        if (close) close.addEventListener("click", closeNav);
+        overlay.querySelectorAll("a").forEach(function (a) {
+          a.addEventListener("click", closeNav);
+        });
+      })();
+      // ================= FIREBASE GOOGLE LOGIN =================
+      const firebaseConfig = {
+        apiKey: "AIzaSyAMeR2DCCVM2MIc7pvbZ8u3Ow0XTZPxls0",
+        authDomain: "coffeetime-4dda4.firebaseapp.com",
+        projectId: "coffeetime-4dda4",
+        storageBucket: "coffeetime-4dda4.firebasestorage.app",
+        messagingSenderId: "1019514363890",
+        appId: "1:1019514363890:web:52ebcd0bb9c44f68d1156b",
+        measurementId: "G-CSDKJNE7N7",
+      };
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+
+      import {
+        getAuth,
+        GoogleAuthProvider,
+        signInWithPopup,
+      } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-auth.js";
+
+      const app = initializeApp(firebaseConfig);
+
+      const auth = getAuth(app);
+
+      const provider = new GoogleAuthProvider();
+
+      const googleBtn = document.querySelector(".btn-social");
+
+      if (googleBtn) {
+        googleBtn.addEventListener("click", async () => {
+          try {
+            const result = await signInWithPopup(auth, provider);
+
+            const user = result.user;
+
+            await fetch("/google-login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                name: user.displayName,
+                email: user.email,
+                photo: user.photoURL,
+              }),
+            });
+
+            window.location.href = "/";
+          } catch (error) {
+            console.log(error);
+
+            alert(error.message);
+          }
+        });
+      }
+    </script>
   </body>
 </html>

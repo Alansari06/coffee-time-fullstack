@@ -22,6 +22,9 @@ import os  # For reading environment variables (like DATABASE_URL)
 # Create the main Flask application object
 app = Flask(__name__)
 
+# Set the secret key for session management — this should be a long random string in production
+app.secret_key = "coffee_time_secret" 
+
 # Secret key — Flask uses this to encrypt session cookies
 # Always change this to a long random string in production
 app.secret_key = "coffeetime_secret_2025_change_me"
@@ -405,6 +408,19 @@ def login():
 
     # GET — show empty login form
     return render_template("login.html")
+
+@app.route("/google-login", methods=["POST"])
+def google_login():
+
+    data = request.get_json()
+
+    session["user"] = {
+        "name": data["name"],
+        "email": data["email"],
+        "photo": data["photo"]
+    }
+
+    return jsonify({"message": "success"})
 
 
 # ── 9. ACCOUNT PAGE (login required) ─────────────────────────────────────────
