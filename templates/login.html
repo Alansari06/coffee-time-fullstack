@@ -1686,8 +1686,8 @@
 
     <script type="module">
       /* ============================================================
-   Coffee Time — script.js (Shared across all pages)
-   ============================================================ */
+        Coffee Time — script.js (Shared across all pages)
+        ============================================================ */
 
       /* ── Counter animation ── */
       function animateCounter(el, target, duration = 1800) {
@@ -1747,7 +1747,7 @@
     background:rgba(255,255,255,.22); border-radius:50%;
     transform:scale(0); animation:ripple .55s linear;
     pointer-events:none;
-  `;
+   `;
         btn.style.position = "relative";
         btn.style.overflow = "hidden";
         btn.appendChild(rip);
@@ -1854,6 +1854,9 @@
           a.addEventListener("click", closeNav);
         });
       })();
+
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+
       const firebaseConfig = {
         apiKey: "AIzaSyAMeR2DCCVM2MIc7pvbZ8u3Ow0XTZPxls0",
         authDomain: "coffeetime-4dda4.firebaseapp.com",
@@ -1863,7 +1866,6 @@
         appId: "1:1019514363890:web:52ebcd0bb9c44f68d1156b",
         measurementId: "G-CSDKJNE7N7",
       };
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 
       import {
         getAuth,
@@ -1877,7 +1879,7 @@
 
       const provider = new GoogleAuthProvider();
 
-      const googleBtn = document.querySelector(".btn-social");
+      const googleBtn = document.querySelector(".google-login");
 
       if (googleBtn) {
         googleBtn.addEventListener("click", async () => {

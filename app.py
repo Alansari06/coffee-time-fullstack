@@ -29,7 +29,6 @@ app.secret_key = "coffee_time_secret"
 # Always change this to a long random string in production
 app.secret_key = "coffeetime_secret_2025_change_me"
 
-
 # ── 2. DATABASE CONNECTION ───────────────────────────────────────────────────
 def get_db():
     DATABASE_URL = os.environ.get('DATABASE_URL')
@@ -145,7 +144,7 @@ def login_required(f):
 
         # Check the session dictionary for 'user_email'
         # If it's missing, the user has not logged in
-        if "user_email" not in session:
+        if "user_email" not in session and "user" not in session:
 
             # Not logged in → send them to the login page
             return redirect(url_for("login"))
@@ -160,56 +159,65 @@ def login_required(f):
 # ── 5. HELPER: GET CURRENT LOGGED-IN USER ────────────────────────────────────
 
 def get_current_user():
-    """
-    Fetches the full profile of whoever is currently logged in.
-    Uses the email stored in the session to look them up in the database.
-    Returns a dictionary with user details, or None if not logged in.
-    """
+    # Google Login User
+    if "user" in session:
+        email = session["user"]["email"]
+        try:
+            conn = get_db()
+            cur = conn.cursor()
+            cur.execute(
+                "SELECT id, first_name, last_name, email, phone, created_at FROM users WHERE email = %s",
+                (email,)
+            )
+            row = cur.fetchone()
+            cur.close()
+            conn.close()
+            if row:
+                return {
+                    "id":         row[0],
+                    "first_name": row[1],
+                    "last_name":  row[2],
+                    "email":      row[3],
+                    "phone":      row[4],
+                    "joined":     row[5],
+                    "photo":      session["user"].get("photo", "")
+                }
+        except Exception as e:
+            print(f"❌ Google user fetch error: {e}")
+        return session["user"]  # fallback
 
-    # If 'user_email' is not in session, nobody is logged in
     if "user_email" not in session:
-        return None  # Return nothing — caller must handle this
-
-    try:
-        # Open database connection
-        conn = get_db()
-        cur  = conn.cursor()
-
-        # Run SQL to get the user's full info by their email
-        cur.execute(
-            "SELECT id, first_name, last_name, email, phone, created_at FROM users WHERE email = %s",
-            (session["user_email"],)  # Pass the session email safely
-        )
-
-        # fetchone() returns one row as a tuple, or None if not found
-        row = cur.fetchone()
-
-        # Done with database — close connection
-        cur.close()
-        conn.close()
-
-        # If we got a row back, convert it to a readable dictionary
-        if row:
-            return {
-                "id":         row[0],  # e.g. 1, 2, 3...
-                "first_name": row[1],  # e.g. "Anas"
-                "last_name":  row[2],  # e.g. "Khan"
-                "email":      row[3],  # e.g. "anas@gmail.com"
-                "phone":      row[4],  # e.g. "+91 9876543210"
-                "joined":     row[5],  # e.g. datetime(2025, 4, 25)
-            }
-
-    except Exception as e:
-        # Something went wrong — print error and return None
-        print(f"❌ get_current_user error: {e}")
         return None
 
+    try:
+        conn = get_db()
+        cur  = conn.cursor()
+        cur.execute(
+            "SELECT id, first_name, last_name, email, phone, created_at FROM users WHERE email = %s",
+            (session["user_email"],)
+        )
+        row = cur.fetchone()
+        cur.close()
+        conn.close()
+        if row:
+            return {
+                "id":         row[0],
+                "first_name": row[1],
+                "last_name":  row[2],
+                "email":      row[3],
+                "phone":      row[4],
+                "joined":     row[5],
+            }
+    except Exception as e:
+        print(f"❌ get_current_user error: {e}")
+        return None
 
 # ── 6. PUBLIC PAGES ───────────────────────────────────────────────────────────
 
 # Home page — everyone can see this
 @app.route("/")
 def home():
+    print(session.get("user"))
     user = get_current_user()  # Get logged-in user info (None if not logged in)
     return render_template("index.html", user=user)  # Pass user to template
 
@@ -411,13 +419,37 @@ def login():
 
 @app.route("/google-login", methods=["POST"])
 def google_login():
-
     data = request.get_json()
+    full_name = data["name"].split(" ", 1)
+    first_name = full_name[0]
+    last_name = full_name[1] if len(full_name) > 1 else ""
+    email = data["email"]
+    photo = data.get("photo", "")
 
+    conn = get_db()
+    cur = conn.cursor()
+
+    # 1. Check if email exists
+    cur.execute("SELECT id FROM users WHERE email = %s", (email,))
+    existing = cur.fetchone()
+
+    # 2. Insert if not exists
+    if not existing:
+        cur.execute("""
+            INSERT INTO users (first_name, last_name, email, password)
+            VALUES (%s, %s, %s, %s)
+        """, (first_name, last_name, email, "google_oauth"))
+        conn.commit()
+
+    cur.close()
+    conn.close()
+
+    # 3. Create session
     session["user"] = {
-        "name": data["name"],
-        "email": data["email"],
-        "photo": data["photo"]
+        "first_name": first_name,
+        "last_name": last_name,
+        "email": email,
+        "photo": photo
     }
 
     return jsonify({"message": "success"})
@@ -513,9 +545,9 @@ def add_to_cart():
             # No open order — create a brand new one
             cur.execute("""
                 INSERT INTO orders (user_id, user_email, total_amount, status)
-                VALUES (%s, %s, 0, 'pending')
+                VALUES (NULL, %s, 0, 'pending')
                 RETURNING id
-            """, (user["id"], user["email"]))
+            """, (user["email"],))
 
             # RETURNING id gives us back the new order's ID
             order_id = cur.fetchone()[0]
@@ -586,7 +618,7 @@ def cart():
 
             # Fetch all items inside this order
             cur.execute("""
-                SELECT item_name, item_price, quantity, category
+                SELECT id, item_name, item_price, quantity, category
                 FROM order_items
                 WHERE order_id = %s
             """, (order_id,))
@@ -594,11 +626,12 @@ def cart():
             # Convert each row to a dictionary
             for row in cur.fetchall():
                 cart_items.append({
-                    "name":     row[0],                     # Item name
-                    "price":    row[1],                     # Unit price
-                    "quantity": row[2],                     # Quantity
-                    "category": row[3],                     # Category
-                    "subtotal": float(row[1]) * int(row[2]) # price × quantity
+                    "id":       row[0],                     # item id
+                    "name":     row[1],                     # Item name
+                    "price":    row[2],                     # Unit price
+                    "quantity": row[3],                     # Quantity
+                    "category": row[4],                     # Category
+                    "subtotal": float(row[2]) * int(row[3]) # price × quantity
                 })
 
         cur.close()
@@ -615,6 +648,51 @@ def cart():
                            cart_items=cart_items,
                            order_total=order_total,
                            order_id=order_id)
+
+
+@app.route("/update-cart", methods=["POST"])
+def update_cart():
+
+    if "user" not in session and "user_email" not in session:
+        return redirect("/login")
+
+    item_id = request.form.get("item_id")
+    action = request.form.get("action")
+
+    if not item_id:
+        return jsonify({'error': 'item_id missing'}), 400
+    item_id = int(item_id)
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    if action == "increase":
+
+        cur.execute("""
+            UPDATE order_items
+            SET quantity = quantity + 1
+            WHERE id = %s
+        """, (item_id,))
+
+    elif action == "decrease":
+
+        cur.execute("""
+            UPDATE order_items
+            SET quantity = quantity - 1
+            WHERE id = %s
+        """, (item_id,))
+
+        cur.execute("""
+            DELETE FROM order_items
+            WHERE id = %s AND quantity <= 0
+        """, (item_id,))
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    return redirect("/cart")
 
 
 # ── 12. CONFIRM / PLACE ORDER ─────────────────────────────────────────────────
@@ -655,6 +733,61 @@ def place_order(order_id):
     except Exception as e:
         print(f"❌ Place order error: {e}")
         return redirect(url_for("cart"))
+    
+# Note: In a real app, you'd also want to handle payment processing here before confirming the order.
+# checkout page
+@app.route("/checkout")
+@login_required
+def checkout():
+    user = get_current_user()
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    # pending order fetch karo
+    cur.execute("""
+        SELECT id, total_amount FROM orders
+        WHERE user_email = %s AND status = 'pending'
+        ORDER BY created_at DESC LIMIT 1
+    """, (user["email"],))
+
+    order = cur.fetchone()
+    cur.close()
+    conn.close()
+
+    if not order:
+        return redirect(url_for("cart"))
+
+    return render_template("checkout.html",
+                           user=user,
+                           order_id=order[0],
+                           total=order[1])
+
+
+# apply discount code
+@app.route("/apply-discount", methods=["POST"])
+@login_required
+def apply_discount():
+    code = request.form.get("code", "").strip().upper()
+
+    # simple discount codes
+    discounts = {
+        "COFFEE10": 10,   # 10% off
+        "WELCOME20": 20,  # 20% off
+        "SAVE50": 50,     # 50 rupees off flat
+    }
+
+    if code in discounts:
+        return jsonify({
+            "success": True,
+            "discount": discounts[code],
+            "message": f"Code applied! {discounts[code]}% off"
+        })
+    else:
+        return jsonify({
+            "success": False,
+            "message": "Invalid discount code"
+        })
 
 
 # ── 13. CONTACT FORM ──────────────────────────────────────────────────────────
@@ -729,6 +862,21 @@ def logout():
 
     # Send to home page after logout
     return redirect(url_for("home"))
+
+@app.route("/update-phone", methods=["POST"])
+@login_required
+def update_phone():
+    phone = request.form.get("phone", "").strip()
+    user = get_current_user()
+
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("UPDATE users SET phone = %s WHERE email = %s", (phone, user["email"]))
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect("/account")
 
 @app.route("/thankyou")
 def thankyou():
@@ -1041,7 +1189,6 @@ def admin_users():
     conn.close()
 
     return render_template("admin/users.html", users=users)
-
 
 # ── 15. RUN THE APP ───────────────────────────────────────────────────────────
 
