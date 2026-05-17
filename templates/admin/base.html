@@ -225,6 +225,25 @@
       .btn-red:hover {
         background: #c0392b;
       }
+
+      /* all table cells — break long text so table doesn't overflow */
+      table td {
+        word-break: break-word;
+        max-width: 200px;
+      }
+
+      /* delivery address column — little more space and smaller text */
+      table td:nth-child(8) {
+        max-width: 250px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.75);
+      }
+
+      /* name and phone — keep on single line */
+      table td:nth-child(6),
+      table td:nth-child(7) {
+        white-space: nowrap;
+      }
     </style>
   </head>
 
