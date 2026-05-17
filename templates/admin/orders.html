@@ -5,7 +5,6 @@
 <h1>Orders</h1>
 <p class="subtitle">All customer orders</p>
 
-<!-- orders table -->
 <div class="table-box">
     <table>
         <thead>
@@ -15,28 +14,32 @@
                 <th>Total</th>
                 <th>Status</th>
                 <th>Date</th>
+                <!-- new delivery columns -->
+                <th>Customer Name</th>
+                <th>Phone</th>
+                <th>Delivery Address</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
 
-            <!-- agar koi order nahi hai -->
+            <!-- show message if no orders exist -->
             {% if not orders %}
             <tr>
-                <td colspan="6" style="text-align:center; padding: 30px;">
+                <td colspan="9" style="text-align:center; padding: 30px;">
                     No orders yet!
                 </td>
             </tr>
             {% endif %}
 
-            <!-- har order ek row mein dikhao -->
+            <!-- loop through each order -->
             {% for order in orders %}
             <tr>
                 <td>#{{ order.id }}</td>
                 <td>{{ order.email }}</td>
                 <td>₹{{ order.total }}</td>
 
-                <!-- status ke hisaab se color -->
+                <!-- color based on order status -->
                 <td>
                     {% if order.status == 'pending' %}
                         <span style="color: orange; font-weight: bold;">⏳ Pending</span>
@@ -49,7 +52,12 @@
 
                 <td>{{ order.created_at.strftime('%d %b %Y') }}</td>
 
-                <!-- status change buttons -->
+                <!-- delivery details from address form -->
+                <td>{{ order.del_name }}</td>
+                <td>{{ order.del_phone }}</td>
+                <td>{{ order.del_address }}</td>
+
+                <!-- admin can change order status here -->
                 <td>
                     <form method="POST" action="/admin/orders/{{ order.id }}/status">
                         <select name="status" style="padding: 6px; border-radius: 6px; border: 1px solid #ddd;">

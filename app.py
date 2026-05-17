@@ -1050,23 +1050,24 @@ def admin_dashboard():
 @app.route("/admin/orders")
 def admin_orders():
 
-    # check karo admin logged in hai
+    # check if admin logged in
     if not session.get("admin"):
         return redirect("/admin/login")
 
     conn = get_db()
     cur = conn.cursor()
 
-    # saare orders fetch karo — newest pehle
+    # fetch all orders — newest first
     cur.execute("""
-        SELECT id, user_email, total_amount, status, created_at 
+        SELECT id, user_email, total_amount, status, created_at,
+                delivery_name, delivery_phone, delivery_address 
         FROM orders 
         ORDER BY created_at DESC
     """)
 
     rows = cur.fetchall()
 
-    # har row ko dictionary mein convert karo
+    # convert each row in dictionary
     orders = []
     for row in rows:
         orders.append({
@@ -1075,12 +1076,35 @@ def admin_orders():
             "total":      row[2],
             "status":     row[3],
             "created_at": row[4],
+            "del_name":   row[5] or "—",   # if NULL show Dash
+            "del_phone":  row[6] or "—",
+            "del_address":row[7] or "—",
         })
 
     cur.close()
     conn.close()
 
     return render_template("admin/orders.html", orders=orders)
+
+@app.route("/admin/orders/<int:order_id>/status", methods=["POST"])
+def admin_order_status(order_id):
+    if not session.get("admin"):
+        return redirect("/admin/login")
+
+    new_status = request.form.get("status")  # pending / confirmed / delivered
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+        UPDATE orders SET status = %s WHERE id = %s
+    """, (new_status, order_id))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect("/admin/orders")
 
 # show all menu items
 # admin menu — admin ke liye
