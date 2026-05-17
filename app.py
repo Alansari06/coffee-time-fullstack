@@ -766,19 +766,23 @@ def checkout():
 
     # form submitted
     if request.method == "POST":
-
-        name = request.form.get("name", "").strip()
-        phone = request.form.get("phone", "").strip()
-        address = request.form.get("address", "").strip()
+ 
+        name = request.form.get("name",         "").strip()
+        phone = request.form.get("phone",       "").strip()
+        address = request.form.get("address",   "").strip()
         landmark = request.form.get("landmark", "").strip()
-        city = request.form.get("city", "").strip()
-        pincode = request.form.get("pincode", "").strip()
+        city = request.form.get("city",         "").strip()
+        pincode = request.form.get("pincode",   "").strip()
 
         # full address
         full_address = f"{address}, {landmark}, {city}, {pincode}"
 
+        #new connect for post
+        conn2 = get_db()
+        cur2  = conn2.cursor()
+
         # save address
-        cur.execute("""
+        cur2.execute("""
             UPDATE orders
             SET delivery_name = %s,
                 delivery_phone = %s,
@@ -786,10 +790,10 @@ def checkout():
             WHERE id = %s
         """, (name, phone, full_address, order_id))
 
-        conn.commit()
+        conn2.commit()
 
-        cur.close()
-        conn.close()
+        cur2.close()
+        conn2.close()
 
         # go to payment page
         return redirect(url_for("payment", order_id=order_id))
