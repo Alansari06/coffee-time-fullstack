@@ -1321,6 +1321,16 @@ def admin_users():
 
     return render_template("admin/users.html", users=users)
 
+@app.route("/debug-order/<int:order_id>")
+def debug_order(order_id):
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT id, delivery_name, delivery_phone, delivery_address FROM orders WHERE id = %s", (order_id,))
+    row = cur.fetchone()
+    cur.close()
+    conn.close()
+    return str(row)
+
 # ── 15. RUN THE APP ───────────────────────────────────────────────────────────
 
 # Ye Render pe bhi chalega
