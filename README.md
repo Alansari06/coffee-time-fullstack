@@ -13,13 +13,54 @@
 
 ## 📸 Screenshots
 
-| Home | Menu | Cart |
-|------|------|------|
-| ![Home](home.png) | ![Menu](menu.png) | ![cart](cart.png) |
+### 🏠 Home Page
+![Home](screenshots/home.png)
 
-| Checkout | Account | Admin |
-|----------|---------|-------|
-| ![Checkout](checkout.png) | ![Account](account.png) | ![Admin](admin.png) |
+### 📖 About Us
+![About](screenshots/about.png)
+
+### 🍵 Menu
+![Menu](screenshots/menu.png)
+
+### ✨ Specials
+![Specials](screenshots/specials.png)
+
+### 📬 Contact
+![Contact](screenshots/contact.png)
+
+### 🔐 Login
+![Login](screenshots/login.png)
+
+### 📝 Sign Up
+![Signup](screenshots/signup.png)
+
+### 👤 My Account
+![Account](screenshots/account.png)
+
+### 🛒 Cart
+![Cart](screenshots/cart.png)
+
+### 📍 Delivery Address
+![Checkout](screenshots/checkout.png)
+
+### 💳 Payment
+![Payment](screenshots/payment.png)
+
+---
+
+### 🔧 Admin Panel
+
+| Admin Login | Dashboard |
+|-------------|-----------|
+| ![Admin Login](screenshots/admin_login.png) | ![Dashboard](screenshots/admin_dashboard.png) |
+
+| Orders | Menu Management |
+|--------|----------------|
+| ![Orders](screenshots/admin_orders.png) | ![Menu](screenshots/admin_menu.png) |
+
+| Users | Contact Messages |
+|-------|-----------------|
+| ![Users](screenshots/admin_users.png) | ![Contacts](screenshots/admin_contacts.png) |
 
 ---
 
@@ -151,4 +192,4 @@ Password: coffee123
 
 **Anas Ansari** — Full Stack Developer
 
-> Built with ☕ & passion in Cleveland style!
+> Built with ☕ & passion!
