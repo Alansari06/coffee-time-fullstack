@@ -1794,7 +1794,6 @@
           <div class="info-card-value {{ 'muted' if not user.phone }}">
             {{ user.phone if user.phone else 'Not provided' }}
           </div>
-          {% if not user.phone %}
           <form
             action="/update-phone"
             method="POST"
@@ -1817,7 +1816,6 @@
               "/>
             <button type="submit"class="btn-primary"style="padding: 8px 12px; font-size: 12px; white-space:nowrap;flex-shrink:0;">Save</button>
           </form>
-          {% endif %}
         </div>
 
         <!-- Member since card — shows when account was created -->

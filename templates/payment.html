@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Checkout — Coffee Time</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: #1a0a00;
+        color: #fff;
+        min-height: 100vh;
+        padding: 40px 20px;
+      }
+
+      .container {
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 28px;
+        margin-bottom: 5px;
+      }
+
+      h1 em {
+        font-style: italic;
+        color: #f0a830;
+      }
+
+      .subtitle {
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 14px;
+        margin-bottom: 30px;
+      }
+
+      /* each section box */
+      .box {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 20px;
+      }
+
+      .box h3 {
+        font-size: 15px;
+        color: #d4820a;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
+
+      /* input fields */
+      input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        padding: 12px 16px;
+        color: #fff;
+        font-size: 14px;
+        font-family: "DM Sans", sans-serif;
+        outline: none;
+        margin-bottom: 12px;
+        transition: border-color 0.2s;
+      }
+
+      input:focus {
+        border-color: #d4820a;
+      }
+      input::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      /* discount row */
+      .discount-row {
+        display: flex;
+        gap: 10px;
+      }
+
+      .discount-row input {
+        flex: 1;
+        margin-bottom: 0;
+        text-transform: uppercase;
+      }
+
+      /* buttons */
+      .btn-amber {
+        background: #d4820a;
+        color: #1a0a00;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+        white-space: nowrap;
+      }
+
+      .btn-amber:hover {
+        background: #f0a830;
+      }
+
+      /* payment methods */
+      .methods {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+
+      .method {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+        padding: 12px;
+        text-align: center;
+        cursor: pointer;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.65);
+        transition: all 0.2s;
+      }
+
+      .method.active {
+        border-color: #d4820a;
+        color: #f0a830;
+        background: rgba(212, 130, 10, 0.08);
+      }
+
+      .method .icon {
+        font-size: 20px;
+        margin-bottom: 4px;
+      }
+
+      /* order summary */
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.65);
+        margin-bottom: 10px;
+      }
+
+      .summary-row.total {
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 12px;
+        margin-top: 5px;
+      }
+
+      .discount-applied {
+        color: #4caf50;
+        font-size: 13px;
+        margin-top: 8px;
+        display: none;
+      }
+
+      /* pay button */
+      .btn-pay {
+        width: 100%;
+        background: #d4820a;
+        color: #1a0a00;
+        border: none;
+        padding: 16px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+          background 0.2s,
+          transform 0.2s;
+        font-family: "DM Sans", sans-serif;
+      }
+
+      .btn-pay:hover {
+        background: #f0a830;
+        transform: translateY(-2px);
+      }
+
+      .secure {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.35);
+        font-size: 12px;
+        margin-top: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>☕ <em>Checkout</em></h1>
+      <p class="subtitle">Complete your coffee order</p>
+
+      <!-- Order Summary -->
+      <div class="box">
+        <h3>Order Summary</h3>
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="subtotal">₹{{ total }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Discount</span>
+          <span id="discount-amount" style="color: #4caf50">-₹0</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span id="total-amount">₹{{ total }}</span>
+        </div>
+      </div>
+
+      <!-- Discount Code -->
+      <div class="box">
+        <h3>Discount Code</h3>
+        <div class="discount-row">
+          <input
+            type="text"
+            id="discount-code"
+            placeholder="Enter code e.g. COFFEE10"
+          />
+          <button class="btn-amber" onclick="applyDiscount()">Apply</button>
+        </div>
+        <p class="discount-applied" id="discount-msg">✅ Discount applied!</p>
+      </div>
+
+      <!-- Payment Method -->
+      <div class="box">
+        <h3>Payment Method</h3>
+
+        <div class="methods">
+          <div class="method active" onclick="selectMethod(this, 'card')">
+            <div class="icon">💳</div>
+            Card
+          </div>
+          <div class="method" onclick="selectMethod(this, 'upi')">
+            <div class="icon">📱</div>
+            UPI
+          </div>
+          <div class="method" onclick="selectMethod(this, 'cod')">
+            <div class="icon">💵</div>
+            Cash
+          </div>
+        </div>
+
+        <!-- Card Fields -->
+        <div id="card-fields">
+          <input
+            type="text"
+            placeholder="Card Number"
+            maxlength="19"
+            oninput="formatCard(this)"
+          />
+          <div class="row">
+            <input type="text" placeholder="MM/YY" maxlength="5" />
+            <input type="text" placeholder="CVV" maxlength="3" />
+          </div>
+          <input type="text" placeholder="Name on Card" />
+        </div>
+
+        <!-- UPI Fields -->
+        <div id="upi-fields" style="display: none">
+          <input type="text" placeholder="Enter UPI ID e.g. name@upi" />
+        </div>
+
+        <!-- Cash on Delivery -->
+        <div id="cod-fields" style="display: none">
+          <p style="color: rgba(255, 255, 255, 0.55); font-size: 14px">
+            Pay when your order arrives ☕
+          </p>
+        </div>
+      </div>
+
+      <!-- Pay Button -->
+      <button class="btn-pay" onclick="placeOrder()">
+        Pay ₹<span id="pay-amount">{{ total }}</span>
+      </button>
+      <p class="secure">🔒 Secure & encrypted payment</p>
+    </div>
+
+    <script>
+        var originalTotal = {{ total }};
+        var discountPercent = 0;
+        var currentMethod = 'card';
+
+        // apply discount code
+        function applyDiscount() {
+          var code = document.getElementById('discount-code').value;
+
+          fetch('/apply-discount', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'code=' + code
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              discountPercent = data.discount;
+              updateTotal();
+              document.getElementById('discount-msg').style.display = 'block';
+              document.getElementById('discount-msg').textContent = '✅ ' + data.message;
+            } else {
+              document.getElementById('discount-msg').style.display = 'block';
+              document.getElementById('discount-msg').style.color = '#ff6b6b';
+              document.getElementById('discount-msg').textContent = '❌ ' + data.message;
+            }
+          });
+        }
+
+        // update total after discount
+        function updateTotal() {
+          var discount = (originalTotal * discountPercent) / 100;
+          var finalTotal = originalTotal - discount;
+
+          document.getElementById('discount-amount').textContent = '-₹' + discount.toFixed(2);
+          document.getElementById('total-amount').textContent = '₹' + finalTotal.toFixed(2);
+          document.getElementById('pay-amount').textContent = finalTotal.toFixed(2);
+        }
+
+        // select payment method
+        function selectMethod(el, method) {
+          document.querySelectorAll('.method').forEach(m => m.classList.remove('active'));
+          el.classList.add('active');
+          currentMethod = method;
+
+          document.getElementById('card-fields').style.display = method === 'card' ? 'block' : 'none';
+          document.getElementById('upi-fields').style.display = method === 'upi' ? 'block' : 'none';
+          document.getElementById('cod-fields').style.display = method === 'cod' ? 'block' : 'none';
+        }
+
+        // format card number
+        function formatCard(input) {
+          var val = input.value.replace(/\D/g, '').substring(0, 16);
+          input.value = val.replace(/(.{4})/g, '$1 ').trim();
+        }
+
+        // place order
+      function placeOrder() {
+          fetch('/place-order/{{ order_id }}', {
+              method: 'POST',
+          })
+          .then(res => {
+              if (res.redirected || res.ok) {
+                  alert('Order placed successfully! ☕\nThank you for choosing Coffee Time!');
+                  window.location.href = '/account';
+              }
+          })
+          .catch(() => {
+              alert('Something went wrong. Please try again.');
+          });
+      }
+    </script>
+  </body>
+</html>

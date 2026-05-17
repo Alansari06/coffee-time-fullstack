@@ -734,34 +734,137 @@ def place_order(order_id):
         print(f"❌ Place order error: {e}")
         return redirect(url_for("cart"))
     
-# Note: In a real app, you'd also want to handle payment processing here before confirming the order.
 # checkout page
-@app.route("/checkout")
+@app.route("/checkout", methods=["GET", "POST"])
 @login_required
 def checkout():
+
     user = get_current_user()
 
     conn = get_db()
     cur = conn.cursor()
 
-    # pending order fetch karo
+    # get latest pending order
+    cur.execute("""
+        SELECT id, total_amount
+        FROM orders
+        WHERE user_email = %s
+        AND status = 'pending'
+        ORDER BY created_at DESC
+        LIMIT 1
+    """, (user["email"],))
+
+    order = cur.fetchone()
+
+    if not order:
+        cur.close()
+        conn.close()
+        return redirect(url_for("cart"))
+
+    order_id = order[0]
+    total = order[1]
+
+    # form submitted
+    if request.method == "POST":
+
+        name = request.form.get("name", "").strip()
+        phone = request.form.get("phone", "").strip()
+        address = request.form.get("address", "").strip()
+        landmark = request.form.get("landmark", "").strip()
+        city = request.form.get("city", "").strip()
+        pincode = request.form.get("pincode", "").strip()
+
+        # full address
+        full_address = f"{address}, {landmark}, {city}, {pincode}"
+
+        # save address
+        cur.execute("""
+            UPDATE orders
+            SET delivery_name = %s,
+                delivery_phone = %s,
+                delivery_address = %s
+            WHERE id = %s
+        """, (name, phone, full_address, order_id))
+
+        conn.commit()
+
+        cur.close()
+        conn.close()
+
+        # go to payment page
+        return redirect(url_for("payment", order_id=order_id))
+
+    cur.close()
+    conn.close()
+
+    return render_template(
+        "checkout.html",
+        user=user,
+        order_id=order_id,
+        total=total
+    )
+    
+# Note: In a real app, you'd also want to handle payment processing here before confirming the order.
+# payment page
+@app.route("/payment", methods =["GET", "POST"])
+@login_required
+def payment():
+    user = get_current_user()
+
+    conn = get_db()
+    cur = conn.cursor()
+
+    # fetching pending orders
     cur.execute("""
         SELECT id, total_amount FROM orders
         WHERE user_email = %s AND status = 'pending'
         ORDER BY created_at DESC LIMIT 1
     """, (user["email"],))
-
     order = cur.fetchone()
+    
+    if not order:
+        cur.close()
+        conn.close()
+        return redirect(url_for("cart"))
+    
+    order_id = order[0]
+    total = order[1]
+
+    #POST = user submitted the address form
+    if request.method =="POST":
+        name = request.form.get("name",         "").strip()
+        phone = request.form.get("phone",       "").strip()
+        address = request.form.get("address",   "").strip()
+        landmark = request.form.get("landmark", "").strip()
+        city = request.form.get("city",         "").strip()
+        pincode = request.form.get("pincode",         "").strip()
+
+        #combine into one address string 
+        full_address = f"{address}, {landmark}, {city}, {pincode}".strip(", ")
+
+        # save address to the orders table
+        cur.execute("""
+            UPDATE orders 
+            SET delivery_name     =%s,
+                delivery_phone     =%s,
+                delivery_address  =%s
+            WHERE id = %s
+        """, (name, phone, full_address, order_id))
+
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        #now go to payment page
+        return redirect(url_for("payment", order_id=order_id))
     cur.close()
     conn.close()
 
-    if not order:
-        return redirect(url_for("cart"))
-
-    return render_template("checkout.html",
+    #GET = show the adress form
+    return render_template("payment.html",
                            user=user,
-                           order_id=order[0],
-                           total=order[1])
+                           order_id=order_id,
+                           total=total)
 
 
 # apply discount code
